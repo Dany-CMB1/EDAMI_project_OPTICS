@@ -1,6 +1,3 @@
-import .DObject;
-
-package IrisPackage;
 public class Iris extends DObject {
     private int     sepal_length;
     private int     sepal_width;

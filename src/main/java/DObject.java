@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 
 public abstract class DObject {
@@ -72,8 +71,8 @@ public abstract class DObject {
         this.clusterID = clusterID;
     }
 
-    //Methods
-    public void findNeighbors(ArrayList<DObject> D, double epsilon){
+    //Methods of DObject abstract class
+    public void findNeighbors(ArrayList<? extends DObject> D, double epsilon){
         for (int i=0; i< D.size(); i++){
             DObject q = D.get(i);
             if (this.getID() !=q.getID() && this.distance(q) <= epsilon){

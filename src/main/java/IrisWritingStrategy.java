@@ -1,9 +1,5 @@
-package IrisPackage;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import .DObject;
-import IOStrategy.DataWritingStrategy;
 
 public class IrisWritingStrategy implements DataWritingStrategy{
     

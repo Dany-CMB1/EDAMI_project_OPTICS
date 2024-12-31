@@ -3,9 +3,6 @@ import java.io.IOException;
 import static java.lang.Double.NaN;
 import java.util.ArrayList;
 
-import IrisPackage.Iris;
-import IrisPackage.IrisExtractionStrategy;
-
 public class Main {
 
     /**
@@ -19,6 +16,7 @@ public class Main {
    
         for (int i=0; i< D.size(); i++){
             D.get(i).findNeighbors(D, 3);
+            System.out.println(D.get(i));
         }
     }
 
@@ -35,7 +33,7 @@ public class Main {
 
     }
 
-    public static void ExpandClusterOrder(ArrayList<DObject> D, DObject obj, double epsilon, int MinPts, FileOutputStream OrderedFile){
+    public static void ExpandClusterOrder(ArrayList<DObject> D, DObject obj, double epsilon, int MinPts, FileOutputStream OrderedFile) throws IOException {
         ArrayList<Integer> neighbors = obj.getNeighbors();
         obj.setProcessed();
         obj.setReachabilityDistance(NaN);

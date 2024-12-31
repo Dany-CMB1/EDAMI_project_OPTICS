@@ -1,9 +1,6 @@
-package IrisPackage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import IOStrategy.DataExtractionStrategy;
 
 public class IrisExtractionStrategy implements DataExtractionStrategy{
     
