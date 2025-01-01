@@ -9,7 +9,6 @@ public abstract class DObject {
     private ArrayList<Integer> neighbors = new ArrayList<>();
 
     public abstract double distance(DObject p);
-    public abstract DObject extractData(String line);
 
 
     //Getters

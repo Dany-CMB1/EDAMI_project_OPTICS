@@ -1,8 +1,8 @@
 public class Iris extends DObject {
-    private int     sepal_length;
-    private int     sepal_width;
-    private int     petal_length;
-    private int     petal_width;
+    private double     sepal_length;
+    private double     sepal_width;
+    private double     petal_length;
+    private double     petal_width;
     private String  species;
 
     // Constructors
@@ -14,7 +14,7 @@ public class Iris extends DObject {
         this.species = "";
     }
 
-    public Iris(int sepal_length, int sepal_width, int petal_length, int petal_width, String species){
+    public Iris(double sepal_length, double sepal_width, double petal_length, double petal_width, String species){
         this.sepal_length = sepal_length;
         this.sepal_width = sepal_width;
         this.petal_length = petal_length;
@@ -24,19 +24,19 @@ public class Iris extends DObject {
 
 
     // Getters
-    public int getSepalLength(){
+    public double getSepalLength(){
         return this.sepal_length;
     }
 
-    public int getSepalWidth(){
+    public double getSepalWidth(){
         return this.sepal_width;
     }
 
-    public int getPetalLength(){
+    public double getPetalLength(){
         return this.petal_length;
     }
 
-    public int getPetalWidth(){
+    public double getPetalWidth(){
         return this.petal_width;
     }
 
@@ -46,19 +46,19 @@ public class Iris extends DObject {
 
 
     //Setters
-    public void setSepalLength(int sepal_length){
+    public void setSepalLength(double sepal_length){
         this.sepal_length = sepal_length;
     }
 
-    public void setSepalWidth(int sepal_width){
+    public void setSepalWidth(double sepal_width){
         this.sepal_width = sepal_width;
     }
 
-    public void setPetalLength(int petal_length){
+    public void setPetalLength(double petal_length){
         this.petal_length = petal_length;
     }
 
-    public void setPetalWidth(int petal_width){
+    public void setPetalWidth(double petal_width){
         this.petal_width = petal_width;
     }
 
@@ -82,17 +82,5 @@ public class Iris extends DObject {
          + Math.pow(this.petal_width - q.petal_width, 2));
 
         return dist;
-    }
-
-    public Iris extractData(String line){
-        Iris obj = new Iris();
-        String[] values = line.split(",");
-        obj.sepal_length = Integer.parseInt(values[0]);
-        obj.sepal_width = Integer.parseInt(values[1]);
-        obj.petal_length = Integer.parseInt(values[2]);
-        obj.petal_width = Integer.parseInt(values[3]);
-        obj.species = values[4];
-
-        return obj;
     }
 }
