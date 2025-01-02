@@ -1,3 +1,5 @@
+
+
 public class Iris extends DObject {
     private double     sepal_length;
     private double     sepal_width;
@@ -83,4 +85,12 @@ public class Iris extends DObject {
 
         return dist;
     }
+
+    @Override
+    public String toString(){
+        return 
+            this.sepal_length + "," + this.sepal_width + "," + this.petal_length + "," + this.petal_width + "," + this.species 
+            + " | " + super.toString() +"\n";
+    }
+
 }
