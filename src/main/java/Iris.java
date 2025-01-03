@@ -90,7 +90,7 @@ public class Iris extends DObject {
     public String toString(){
         return 
             this.sepal_length + "," + this.sepal_width + "," + this.petal_length + "," + this.petal_width + "," + this.species 
-            + " | " + super.toString() +"\n";
+            + "," + super.toString() +"\n";
     }
 
 }

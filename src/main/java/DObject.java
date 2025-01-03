@@ -5,8 +5,8 @@ import java.util.PriorityQueue;
 public abstract class DObject {
     private int ID = 0;
     private int clusterID = 0;
-    private double reachabilityDistance =  Double.POSITIVE_INFINITY;
-    private double coreDistance = Double.POSITIVE_INFINITY;
+    private double reachabilityDistance = Double.NaN;
+    private double coreDistance = Double.NaN;
     private boolean processed = false;
     private ArrayList<Integer> neighbors = new ArrayList<>();
 
@@ -53,28 +53,34 @@ public abstract class DObject {
     }
 
     public void setProcessed(){
+        if(this.processed){
+            throw new IllegalStateException("Object " + this.ID + " already processed");
+        }
         this.processed = true;
     }
 
-    public void setReachabilityDistance(double reachabilityDistance){
-        this.reachabilityDistance = reachabilityDistance;
+    public void setReachabilityDistance(double rDistance){
+        this.reachabilityDistance = rDistance;
     }
 
     public void setCoreDistance(ArrayList<? extends DObject> D, int MinPts){
 
         int countedNeighbors = 0;
-        ArrayList<? extends DObject> neighbors = this.getNeighbors(D);
+        ArrayList<? extends DObject> neighborhood = this.getNeighbors(D);
 
-        for (DObject n : neighbors){
-
-            if (this.distance(n) < this.coreDistance){
-                this.coreDistance = this.distance(n);
-                countedNeighbors++;
+        // Find the MinPts-th closest neighbor and set the core distance to the distance to that neighbor
+        ArrayList<Double> distancesToNeighbors = new ArrayList<>();
+        for (DObject n : neighborhood){
+            distancesToNeighbors.add(this.distance(n));
+            if (++countedNeighbors == MinPts){
+                break;
             }
         }
-
-        if (countedNeighbors < MinPts){
-            this.coreDistance = Double.POSITIVE_INFINITY;
+        distancesToNeighbors.sort(null);
+        if (distancesToNeighbors.size() >= MinPts){
+            this.coreDistance = distancesToNeighbors.get(MinPts - 1);
+        }else{
+            this.coreDistance = Double.NaN;
         }
     }   
 
