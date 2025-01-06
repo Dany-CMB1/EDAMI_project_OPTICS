@@ -1,13 +1,15 @@
-import static java.lang.Double.isNaN;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-public abstract class DObject {
+import org.apache.commons.math3.ml.clustering.Clusterable;
+
+public abstract class DObject implements Clusterable {
     private int ID = 0;
     private int clusterID = 0;
     private double reachabilityDistance = Double.NaN;
     private double coreDistance = Double.NaN;
     private boolean processed = false;
+    public String whereProcessed;
     private ArrayList<Integer> neighbors = new ArrayList<>();
 
     public abstract double distance(DObject p);
@@ -52,11 +54,12 @@ public abstract class DObject {
         this.ID = ID;
     }
 
-    public void setProcessed(){
+    public void setProcessed(String where){
         if(this.processed){
-            throw new IllegalStateException("Object " + this.ID + " already processed");
+            throw new IllegalStateException("\nObject " + this.ID + " already processed in " + this.whereProcessed + " and now in " + where + "\n" );
         }
         this.processed = true;
+        this.whereProcessed = where;
     }
 
     public void setReachabilityDistance(double rDistance){
@@ -77,7 +80,7 @@ public abstract class DObject {
             }
         }
         distancesToNeighbors.sort(null);
-        if (distancesToNeighbors.size() >= MinPts){
+        if (countedNeighbors >= MinPts){
             this.coreDistance = distancesToNeighbors.get(MinPts - 1);
         }else{
             this.coreDistance = Double.NaN;
@@ -104,11 +107,11 @@ public abstract class DObject {
                 double newReachDist = Math.max(this.coreDistance, this.distance(n));
 
                 // n is not in orderSeeds
-                if (isNaN(n.getReachabilityDistance())){
+                if (!orderSeeds.contains(n)){
                     n.setReachabilityDistance(newReachDist);                   
                 }
                 // n is in orderSeeds ==> update reachability distance if newReachDist is smaller
-                else{
+                else{             
                     if (newReachDist < n.getReachabilityDistance()){
                         orderSeeds.remove(n);
                         n.setReachabilityDistance(newReachDist);      
