@@ -3,11 +3,7 @@ import java.io.IOException;
 import static java.lang.Double.isNaN;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.PriorityQueue;
-
-import org.apache.commons.math3.ml.clustering.Cluster;
-import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 
 public class Main {
 
@@ -22,32 +18,17 @@ public class Main {
         ArrayList<Iris> D = strategy.getData();
 
         try {
-            FileOutputStream OrderedFile = new FileOutputStream("res/iris/ordered.txt", false);
-            OPTICS(D, 0.5,  3, OrderedFile);
+            FileOutputStream OrderedFile = new FileOutputStream("res/iris/ordered.csv", false);
+            uOPTICS(D, 1,  4, OrderedFile);
             OrderedFile.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        DBSCANClusterer<Iris> clusterer = new DBSCANClusterer(0.5, 3);
-        try {
-            FileOutputStream DBSCANResults = new FileOutputStream("res/iris/DBSCAN.txt", false);
-            List<Cluster<Iris>> clusters = clusterer.cluster(D);
-            for (Cluster<Iris> c : clusters){
-                DBSCANResults.write("Cluster\n".getBytes());
-                for (Iris i : c.getPoints()){
-                    DBSCANResults.write(i.toString().getBytes());
-                }
-            }
-            DBSCANResults.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
-    public static void OPTICS(ArrayList<? extends DObject> D, double epsilon, int MinPts, FileOutputStream OrderedFile)  throws IOException { 
+    public static void uOPTICS(ArrayList<? extends DObject> D, double epsilon, int MinPts, FileOutputStream OrderedFile)  throws IOException { 
 
-        OrderedFile.write("ID,CoreDistance,ReachabilityDistance\n".getBytes());
         for (DObject o : D){
             if (!o.isProcessed()){
                 ExpandClusterOrder(D, o, epsilon, MinPts, OrderedFile);
@@ -58,11 +39,12 @@ public class Main {
     public static void ExpandClusterOrder(ArrayList<? extends DObject> D, DObject obj, double epsilon, int MinPts, FileOutputStream OrderedFile) throws IOException {
 
         obj.findNeighbors(D, epsilon);
-        obj.setProcessed("ExpandClusterOrder - arg object:" + obj.getID());
+        obj.setProcessed();
         obj.setReachabilityDistance(Double.NaN);
         obj.setCoreDistance(D, MinPts);
 
-        OrderedFile.write(obj.toString().getBytes());
+        String line = obj.getID() +"\n";
+        OrderedFile.write(line.getBytes());
 
         // If the object is a core object, find new expansion candidates
         if (!isNaN(obj.getCoreDistance())){
@@ -73,9 +55,12 @@ public class Main {
 
                 if (!currentObject.isProcessed()){
                     currentObject.findNeighbors(D, epsilon);
-                    currentObject.setProcessed("ExpandClusterOrder - arg object: " + obj.getID());
+                    currentObject.setProcessed();
                     currentObject.setCoreDistance(D, MinPts);
-                    OrderedFile.write(currentObject.toString().getBytes());
+
+                    line = currentObject.getID() +"\n";
+                    OrderedFile.write(line.getBytes());
+
                     if (!isNaN(currentObject.getCoreDistance())){
                         currentObject.update(orderSeeds, D);
                     }

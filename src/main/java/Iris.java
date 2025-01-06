@@ -46,12 +46,6 @@ public class Iris extends DObject {
         return this.species;
     }
 
-    @Override
-    public double[] getPoint(){
-        double[] point = {this.sepal_length, this.sepal_width, this.petal_length, this.petal_width};
-        return point;
-    }
-
     //Setters
     public void setSepalLength(double sepal_length){
         this.sepal_length = sepal_length;
@@ -96,7 +90,7 @@ public class Iris extends DObject {
         // return 
         //     this.sepal_length + "," + this.sepal_width + "," + this.petal_length + "," + this.petal_width + "," + this.species 
         //     + "," + super.toString() +"\n";
-        return super.toString() + "\n";
+        return super.toString();
     }
 
 }

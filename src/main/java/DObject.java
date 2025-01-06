@@ -1,15 +1,20 @@
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-import org.apache.commons.math3.ml.clustering.Clusterable;
+import javax.swing.JFrame;
 
-public abstract class DObject implements Clusterable {
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset; 
+
+public abstract class DObject {
     private int ID = 0;
     private int clusterID = 0;
     private double reachabilityDistance = Double.NaN;
     private double coreDistance = Double.NaN;
     private boolean processed = false;
-    public String whereProcessed;
+    private String whereProcessed;
     private ArrayList<Integer> neighbors = new ArrayList<>();
 
     public abstract double distance(DObject p);
@@ -52,6 +57,13 @@ public abstract class DObject implements Clusterable {
     //Setters
     public void setID(int ID){
         this.ID = ID;
+    }
+
+    public void setProcessed(){
+        if(this.processed){
+            throw new IllegalStateException("\nObject " + this.ID + " already processed\n" );
+        }
+        else this.processed = true;
     }
 
     public void setProcessed(String where){
@@ -125,6 +137,30 @@ public abstract class DObject implements Clusterable {
     @Override
     public String toString(){
         return this.getID() + "," + this.getCoreDistance() + "," + this.getReachabilityDistance();
+    }
+
+    public static void plotReachability(ArrayList<? extends DObject> D){
+       
+        // Create dataset
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (DObject o : D){
+            dataset.addValue(o.getReachabilityDistance(), "Reachability", Integer.toString(o.getID()));
+        }
+
+        // Create chart
+        JFreeChart chart = ChartFactory.createBarChart(
+                "Reachability Plot",  // Chart title
+                "Cluster-order of the objects",          // X-Axis Label
+                "Reachability",  // Y-Axis Label
+                dataset
+        );
+
+        // Show it in a JFrame
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(new ChartPanel(chart));
+        frame.pack();
+        frame.setVisible(true);
     }
 
 }
