@@ -1,6 +1,4 @@
-package myProject.Iris;
-
-import myProject.DObject;
+package myProject.Datatype;
 
 public class Iris extends DObject {
     protected double     sepal_length;
@@ -71,6 +69,7 @@ public class Iris extends DObject {
 
 
     // Implementation of abstract methods
+    @Override
     public double distance(DObject p) {
         if (!(p instanceof Iris)){
             return -1;

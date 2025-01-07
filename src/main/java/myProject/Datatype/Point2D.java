@@ -1,6 +1,4 @@
-package myProject.Point2D;
-import myProject.DObject;
-
+package myProject.Datatype;
 
 public class Point2D extends DObject {
     protected double x;
@@ -44,6 +42,7 @@ public class Point2D extends DObject {
         this.y = y;
     }
 
+    @Override
     public double distance(DObject p){
         if (!(p instanceof Point2D)){
             return -1;

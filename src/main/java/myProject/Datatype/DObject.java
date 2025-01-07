@@ -1,4 +1,4 @@
-package myProject;
+package myProject.Datatype;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 

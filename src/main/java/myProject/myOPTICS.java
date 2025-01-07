@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+import myProject.Datatype.DObject;
+
 public class myOPTICS {
 
     private double epsilon;

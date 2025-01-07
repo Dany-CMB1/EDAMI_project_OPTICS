@@ -1,9 +1,9 @@
-package myProject.Point2D;
+package myProject.DataExtractionMethod;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import myProject.DataExtractionMethod;
+import myProject.Datatype.Point2D;
 
 public class Point2DExtractionMethod implements DataExtractionMethod{
     

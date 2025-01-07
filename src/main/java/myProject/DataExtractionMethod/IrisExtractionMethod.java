@@ -1,9 +1,11 @@
-package myProject.Iris;
+package myProject.DataExtractionMethod;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import myProject.DataExtractionMethod;
+import myProject.Datatype.Iris;
+
 
 public class IrisExtractionMethod implements DataExtractionMethod{
     
