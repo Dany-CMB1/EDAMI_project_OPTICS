@@ -4,7 +4,6 @@ import static java.lang.Double.isNaN;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
-
 public class Main {
 
     /**
@@ -12,19 +11,32 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        IrisExtractionStrategy strategy = new IrisExtractionStrategy();
-        strategy.extractData("data/iris/iris.data");
+        // IrisExtractionStrategy strategy = new IrisExtractionStrategy();
+        // strategy.extractData("data/iris/iris.data");
 
-        ArrayList<Iris> D = strategy.getData();
+        // ArrayList<Iris> D = strategy.getData();
+
+        // try {
+        //     FileOutputStream OrderedFile = new FileOutputStream("res/iris/ordered.csv", false);
+        //     uOPTICS(D, 1,  4, OrderedFile);
+        //     OrderedFile.close();
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        // }
+
+
+        Point2DExtractionMethod strategy = new Point2DExtractionMethod();
+        strategy.extractData("data/2d/2spiral.csv");
+        ArrayList<Point2D> D = new ArrayList<>();
+        D = strategy.getData();
 
         try {
-            FileOutputStream OrderedFile = new FileOutputStream("res/iris/ordered.csv", false);
+            FileOutputStream OrderedFile = new FileOutputStream("res/2d/ordered.csv", false);
             uOPTICS(D, 1,  4, OrderedFile);
             OrderedFile.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public static void uOPTICS(ArrayList<? extends DObject> D, double epsilon, int MinPts, FileOutputStream OrderedFile)  throws IOException { 
