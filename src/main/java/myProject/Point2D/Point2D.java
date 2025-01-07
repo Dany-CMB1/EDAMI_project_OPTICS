@@ -1,8 +1,10 @@
+package myProject.Point2D;
+import myProject.DObject;
 
 
 public class Point2D extends DObject {
-    private double x;
-    private double y;
+    protected double x;
+    protected double y;
 
     // Constructors
     public Point2D(){

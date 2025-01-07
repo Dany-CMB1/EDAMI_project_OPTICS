@@ -1,11 +1,13 @@
+package myProject.Iris;
 
+import myProject.DObject;
 
 public class Iris extends DObject {
-    private double     sepal_length;
-    private double     sepal_width;
-    private double     petal_length;
-    private double     petal_width;
-    private String  species;
+    protected double     sepal_length;
+    protected double     sepal_width;
+    protected double     petal_length;
+    protected double     petal_width;
+    protected String  species;
 
     // Constructors
     public Iris(){

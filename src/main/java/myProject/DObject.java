@@ -1,3 +1,4 @@
+package myProject;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
@@ -9,13 +10,13 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset; 
 
 public abstract class DObject {
-    private int ID = 0;
-    private int clusterID = 0;
-    private double reachabilityDistance = Double.NaN;
-    private double coreDistance = Double.NaN;
-    private boolean processed = false;
-    private String whereProcessed;
-    private ArrayList<Integer> neighbors = new ArrayList<>();
+    protected int ID = 0;
+    protected int clusterID = 0;
+    protected double reachabilityDistance = Double.NaN;
+    protected double coreDistance = Double.NaN;
+    protected boolean processed = false;
+    protected String whereProcessed;
+    protected ArrayList<Integer> neighbors = new ArrayList<>();
 
     public abstract double distance(DObject p);
 

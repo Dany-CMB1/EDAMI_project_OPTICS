@@ -1,8 +1,11 @@
+package myProject.Point2D;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Point2DExtractionMethod implements DataExtractionStrategy{
+import myProject.DataExtractionMethod;
+
+public class Point2DExtractionMethod implements DataExtractionMethod{
     
     private ArrayList<Point2D> data;
 
@@ -10,6 +13,7 @@ public class Point2DExtractionMethod implements DataExtractionStrategy{
         return this.data;
     }
 
+    @Override
     public void extractData(String path){
 
         this.data = new ArrayList<>();

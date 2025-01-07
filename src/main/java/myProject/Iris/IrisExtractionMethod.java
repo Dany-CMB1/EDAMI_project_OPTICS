@@ -1,8 +1,11 @@
+package myProject.Iris;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class IrisExtractionStrategy implements DataExtractionStrategy{
+import myProject.DataExtractionMethod;
+
+public class IrisExtractionMethod implements DataExtractionMethod{
     
     private ArrayList<Iris> data;
 
@@ -10,6 +13,7 @@ public class IrisExtractionStrategy implements DataExtractionStrategy{
         return this.data;
     }
 
+    @Override
     public void extractData(String path){
 
         this.data = new ArrayList<>();
@@ -37,6 +41,7 @@ public class IrisExtractionStrategy implements DataExtractionStrategy{
 
                 i++;
             }
+            scanner.close();
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());

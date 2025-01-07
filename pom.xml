@@ -34,6 +34,7 @@
             <groupId>com.edwardraff</groupId>
             <artifactId>JSAT</artifactId>
             <version>0.0.9</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     
@@ -55,7 +56,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>Main</mainClass>
+                    <mainClass>Eval</mainClass>
                 </configuration>
             </plugin>
 
