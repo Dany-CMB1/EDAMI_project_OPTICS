@@ -53,7 +53,7 @@ public class myOPTICS {
 
         // If the object is a core object, find new expansion candidates
         if (!Double.isNaN(obj.getCoreDistance())){
-            this.update(obj, D);
+            this.orderSeedsupdate(obj, D);
             while(!this.orderSeeds.isEmpty()){
                 DObject currentObject = orderSeeds.poll();
 
@@ -65,29 +65,29 @@ public class myOPTICS {
                 OrderedFile.write(line.getBytes());
 
                 if (!Double.isNaN(currentObject.getCoreDistance())){
-                    this.update(currentObject, D);
+                    this.orderSeedsupdate(currentObject, D);
                 }
             }
         }
 
     }
 
-    private void update(DObject currentObject, ArrayList<? extends DObject> D){
+    private void orderSeedsupdate(DObject currentObject, ArrayList<? extends DObject> D){
+
+        double core_distance = currentObject.getCoreDistance();
 
         for (DObject n : currentObject.getNeighbors(D)){
             if (!n.isProcessed()){
-                double newReachDist = Math.max(currentObject.getCoreDistance(), currentObject.distance(n));
+                double newReachDist = Math.max(core_distance, currentObject.distance(n));
 
                 // n is not in orderSeeds
-                if (!this.orderSeeds.contains(n)){
-                    n.setReachabilityDistance(newReachDist);                   
+                if (Double.isNaN(n.getReachabilityDistance())){
+                    n.setReachabilityDistance(newReachDist);              
                 }
                 // n is in orderSeeds ==> update reachability distance if newReachDist is smaller
-                else{             
-                    if (newReachDist < n.getReachabilityDistance()){
-                        this.orderSeeds.remove(n);
-                        n.setReachabilityDistance(newReachDist);      
-                    }
+                else if (newReachDist < n.getReachabilityDistance()){
+                    n.setReachabilityDistance(newReachDist);  
+                    this.orderSeeds.remove(n);    
                 }
                 this.orderSeeds.add(n);
             }

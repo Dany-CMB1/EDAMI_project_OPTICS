@@ -60,10 +60,11 @@ public abstract class DObject {
     }
 
     public void setProcessed(){
-        if(this.processed){
-            throw new IllegalStateException("\nObject " + this.ID + " already processed\n" );
-        }
-        else this.processed = true;
+        // if(this.processed){
+        //     throw new IllegalStateException("\nObject " + this.ID + " already processed\n" );
+        // }
+        // else this.processed = true;
+        this.processed = true;
     }
 
     public void setProcessed(String where){
