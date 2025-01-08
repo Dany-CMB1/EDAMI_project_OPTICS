@@ -10,9 +10,11 @@ import myProject.Datatype.Iris;
 
 public class Main {
     public static void main(String[] args) {
+
         IrisExtractionMethod method = new IrisExtractionMethod();
         method.extractData("data/iris/iris.data");
         ArrayList<Iris> D = method.getData();
+
         try {
             FileOutputStream OrderedFile = new FileOutputStream("output/iris/ordered.csv", false);
             myOPTICS optics = new myOPTICS(0.5, 4);

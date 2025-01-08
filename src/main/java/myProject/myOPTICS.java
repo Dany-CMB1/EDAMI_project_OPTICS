@@ -9,8 +9,9 @@ import myProject.Datatype.DObject;
 
 public class myOPTICS {
 
-    private double epsilon;
-    private int MinPts;
+    private final double epsilon;
+    private final int MinPts;
+    private PriorityQueue<DObject> orderSeeds = new PriorityQueue<>(Comparator.comparingDouble(DObject::getReachabilityDistance));
 
     // Constructor
     public myOPTICS(double epsilon, int MinPts) {
@@ -27,13 +28,8 @@ public class myOPTICS {
         return this.MinPts;
     }
 
-    // Setters
-    public void setEpsilon(double epsilon) {
-        this.epsilon = epsilon;
-    }
-
-    public void setMinPts(int MinPts) {
-        this.MinPts = MinPts;
+    public PriorityQueue<DObject> getOrderSeeds() {
+        return this.orderSeeds;
     }
 
     public void cluster(ArrayList<? extends DObject> D, FileOutputStream OrderedFile)  throws IOException { 
@@ -45,7 +41,7 @@ public class myOPTICS {
         }
     }
 
-    public void ExpandClusterOrder(ArrayList<? extends DObject> D, DObject obj, FileOutputStream OrderedFile) throws IOException {
+    private void ExpandClusterOrder(ArrayList<? extends DObject> D, DObject obj, FileOutputStream OrderedFile) throws IOException {
 
         obj.findNeighbors(D, this.epsilon);
         obj.setProcessed();
@@ -57,26 +53,45 @@ public class myOPTICS {
 
         // If the object is a core object, find new expansion candidates
         if (!Double.isNaN(obj.getCoreDistance())){
-            PriorityQueue<DObject> orderSeeds = new PriorityQueue<>(Comparator.comparingDouble(DObject::getReachabilityDistance));
-            obj.update(orderSeeds, D);
-            while(!orderSeeds.isEmpty()){
+            this.update(obj, D);
+            while(!this.orderSeeds.isEmpty()){
                 DObject currentObject = orderSeeds.poll();
 
-                if (!currentObject.isProcessed()){
-                    currentObject.findNeighbors(D, this.epsilon);
-                    currentObject.setProcessed();
-                    currentObject.setCoreDistance(D, this.MinPts);
+                currentObject.findNeighbors(D, this.epsilon);
+                currentObject.setProcessed();
+                currentObject.setCoreDistance(D, this.MinPts);
 
-                    line = currentObject.getID() +"\n";
-                    OrderedFile.write(line.getBytes());
+                line = currentObject.getID() +"\n";
+                OrderedFile.write(line.getBytes());
 
-                    if (!Double.isNaN(currentObject.getCoreDistance())){
-                        currentObject.update(orderSeeds, D);
-                    }
+                if (!Double.isNaN(currentObject.getCoreDistance())){
+                    this.update(currentObject, D);
                 }
             }
         }
 
+    }
+
+    private void update(DObject currentObject, ArrayList<? extends DObject> D){
+
+        for (DObject n : currentObject.getNeighbors(D)){
+            if (!n.isProcessed()){
+                double newReachDist = Math.max(currentObject.getCoreDistance(), currentObject.distance(n));
+
+                // n is not in orderSeeds
+                if (!this.orderSeeds.contains(n)){
+                    n.setReachabilityDistance(newReachDist);                   
+                }
+                // n is in orderSeeds ==> update reachability distance if newReachDist is smaller
+                else{             
+                    if (newReachDist < n.getReachabilityDistance()){
+                        this.orderSeeds.remove(n);
+                        n.setReachabilityDistance(newReachDist);      
+                    }
+                }
+                this.orderSeeds.add(n);
+            }
+        }   
     }
 
 }

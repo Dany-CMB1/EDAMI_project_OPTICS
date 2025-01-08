@@ -1,6 +1,5 @@
 package myProject.Datatype;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
 
 import javax.swing.JFrame;
 
@@ -113,27 +112,6 @@ public abstract class DObject {
         }
     }
 
-    public void update(PriorityQueue<DObject> orderSeeds, ArrayList<? extends DObject> D){
-
-        for (DObject n : this.getNeighbors(D)){
-            if (!n.isProcessed()){
-                double newReachDist = Math.max(this.coreDistance, this.distance(n));
-
-                // n is not in orderSeeds
-                if (!orderSeeds.contains(n)){
-                    n.setReachabilityDistance(newReachDist);                   
-                }
-                // n is in orderSeeds ==> update reachability distance if newReachDist is smaller
-                else{             
-                    if (newReachDist < n.getReachabilityDistance()){
-                        orderSeeds.remove(n);
-                        n.setReachabilityDistance(newReachDist);      
-                    }
-                }
-                orderSeeds.add(n);
-            }
-        }   
-    }
 
     @Override
     public String toString(){
