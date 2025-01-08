@@ -2,10 +2,12 @@ import jsat.clustering.OPTICS;
 
 import org.junit.jupiter.api.Test;
 
-import myProject.Datatype.Iris;
+package myProject;
 import myProject.DataExtractionMethod.IrisExtractionMethod;
-import myProject.Datatype.Point2D;
 import myProject.DataExtractionMethod.Point2DExtractionMethod;
+import myProject.Datatype.Iris;
+import myProject.Datatype.Point2D;
+import myProject.OPTICS.myOPTICS;
 
 public class TestOPTICS{
 
