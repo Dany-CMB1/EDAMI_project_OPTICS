@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 # optics = OPTICS(min_samples=4, max_eps=1, cluster_method='dbscan')
 # optics.fit(D[["SepalLength", "SepalWidth", "PetalLength", "PetalWidth"]])
 
-# file = open('res/iris/expected.csv', 'w')
+# file = open('output/iris/expected.csv', 'w')
 # for o in optics.ordering_:
 #     file.write(str(o) + '\n')
 # file.close()
@@ -23,7 +23,7 @@ D = pd.DataFrame(pd.read_csv('data/2d/2spiral.csv', header=None,
 optics = OPTICS(min_samples=4, max_eps=1, cluster_method='dbscan')
 optics.fit(D[["x", "y"]])
 
-file = open('res/2d/expected.csv', 'w')
+file = open('output/2d/expected.csv', 'w')
 for o in optics.ordering_:
     file.write(str(o) + '\n')
 file.close()

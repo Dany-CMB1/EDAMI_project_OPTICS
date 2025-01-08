@@ -17,7 +17,7 @@ public class TestOPTICS{
         strategy.extractData(data_path);
         ArrayList<Iris> D = strategy.getData();
         try {
-            FileOutputStream OrderedFile = new FileOutputStream("res/iris/ordered.csv", false);
+            FileOutputStream OrderedFile = new FileOutputStream("output/iris/ordered.csv", false);
             myOPTICS optics = new myOPTICS();
             OrderedFile.close();
         } catch (IOException e) {
@@ -34,7 +34,7 @@ public class TestOPTICS{
         ArrayList<Point2D> D = new ArrayList<>();
         D = strategy.getData();
         try {
-            FileOutputStream OrderedFile = new FileOutputStream("res/2d/ordered.csv", false);
+            FileOutputStream OrderedFile = new FileOutputStream("output/2d/ordered.csv", false);
             uOPTICS(D, 1,  4, OrderedFile);
             OrderedFile.close();
         } catch (IOException e) {

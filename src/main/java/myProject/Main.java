@@ -14,7 +14,7 @@ public class Main {
         method.extractData("data/iris/iris.data");
         ArrayList<Iris> D = method.getData();
         try {
-            FileOutputStream OrderedFile = new FileOutputStream("res/iris/ordered.csv", false);
+            FileOutputStream OrderedFile = new FileOutputStream("output/iris/ordered.csv", false);
             myOPTICS optics = new myOPTICS(0.5, 4);
             optics.cluster(D, OrderedFile);
             OrderedFile.close();
