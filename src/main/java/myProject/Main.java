@@ -11,6 +11,7 @@ import jsat.clustering.OPTICS;
 import myProject.DataExtractionMethod.IrisExtractionMethod;
 import myProject.Datatype.Iris;
 import myProject.utils.CSVToARFFConverter;
+import myProject.utils.DataSetStats;
 
 public class Main {
     public static void main(String[] args) {
@@ -29,13 +30,20 @@ public class Main {
         opt.cluster(dataSet);
         double[] expectedReachabilityDistances = opt.getReachabilityArray();  
 
+        System.out.println(opt.getParameters());
+
+        // Use custom OPTICS implementation
         IrisExtractionMethod method = new IrisExtractionMethod();
         method.extractData("data/iris/iris.data");
         ArrayList<Iris> D = method.getData();
-        //radius = stats.getMean() + stats.getStandardDeviation() * 3;
+
+        // Estimate radius as done in jsat.clustering.OPTICS.cluster
+        DataSetStats stats = new DataSetStats(D, 4);
+        double radius = stats.getMean() + stats.getStandardDeviation() * 3;
+
         try {
-            FileOutputStream OrderedFile = new FileOutputStream("output/iris/ordered.csv", false);
-            myOPTICS optics = new myOPTICS(0.5, 4);
+            FileOutputStream OrderedFile = new FileOutputStream("output/iris/expected.csv", false);
+            myOPTICS optics = new myOPTICS(radius, 4);
             optics.cluster(D, OrderedFile);
             OrderedFile.close();
         } catch (IOException e) {
