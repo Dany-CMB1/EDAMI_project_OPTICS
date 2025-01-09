@@ -14,10 +14,10 @@ public abstract class DObject {
     protected double reachabilityDistance = Double.NaN;
     protected double coreDistance = Double.NaN;
     protected boolean processed = false;
+    // Array of intergers containing the IDs of the neighbors of the object
     protected ArrayList<Integer> neighbors = new ArrayList<>();
 
     public abstract double distance(DObject p);
-
 
     //Getters
 
@@ -41,10 +41,12 @@ public abstract class DObject {
         return this.clusterID;
     }
 
+    // Get the IDs of the neighbors of the object
     public ArrayList<Integer> getNeighborsID(){
         return this.neighbors;
     }
 
+    // Get the neighbors of the object, ie the objects of the dataset D whose IDs are in the neighbors array
     public ArrayList<? extends DObject> getNeighbors(ArrayList<? extends DObject> D){
         ArrayList<DObject> neighborhood = new ArrayList<>();
         for (int nID : this.neighbors){
@@ -71,6 +73,7 @@ public abstract class DObject {
         this.reachabilityDistance = rDistance;
     }
 
+    // Set the core distance of the object, as described in the OPTICS algorithm
     public void setCoreDistance(ArrayList<? extends DObject> D, int MinPts){
 
         int countedNeighbors = 0;
@@ -96,7 +99,8 @@ public abstract class DObject {
         this.clusterID = clusterID;
     }
 
-    //Methods of DObject abstract class
+    //Find the neighbors of the object within a distance epsilon
+    //The object itself is not counted as a neighbor
     public void findNeighbors(ArrayList<? extends DObject> D, double epsilon){
         for (DObject q : D){
             if (this.getID() != q.getID() && this.distance(q) <= epsilon){

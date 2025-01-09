@@ -32,6 +32,7 @@ public class myOPTICS {
         return this.orderSeeds;
     }
 
+    // OPTICS main loop
     public void cluster(ArrayList<? extends DObject> D, FileOutputStream OrderedFile)  throws IOException { 
 
         for (DObject o : D){
@@ -41,6 +42,7 @@ public class myOPTICS {
         }
     }
 
+    // Expand a cluster order
     private void ExpandClusterOrder(ArrayList<? extends DObject> D, DObject obj, FileOutputStream OrderedFile) throws IOException {
 
         obj.findNeighbors(D, this.epsilon);
@@ -75,6 +77,7 @@ public class myOPTICS {
 
     }
 
+    // Update the priority queue seed list
     private void orderSeedsupdate(DObject currentObject, ArrayList<? extends DObject> D){
 
         double core_distance = currentObject.getCoreDistance();

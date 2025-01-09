@@ -30,8 +30,6 @@ public class Main {
         opt.cluster(dataSet);
         double[] expectedReachabilityDistances = opt.getReachabilityArray();  
 
-        System.out.println(opt.getParameters());
-
         // Use custom OPTICS implementation
         IrisExtractionMethod method = new IrisExtractionMethod();
         method.extractData("data/iris/iris.data");
@@ -42,7 +40,7 @@ public class Main {
         double radius = stats.getMean() + stats.getStandardDeviation() * 3;
 
         try {
-            FileOutputStream OrderedFile = new FileOutputStream("output/iris/expected.csv", false);
+            FileOutputStream OrderedFile = new FileOutputStream("output/iris/ordered.csv", false);
             myOPTICS optics = new myOPTICS(radius, 4);
             optics.cluster(D, OrderedFile);
             OrderedFile.close();
