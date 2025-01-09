@@ -14,7 +14,6 @@ public abstract class DObject {
     protected double reachabilityDistance = Double.NaN;
     protected double coreDistance = Double.NaN;
     protected boolean processed = false;
-    protected String whereProcessed;
     protected ArrayList<Integer> neighbors = new ArrayList<>();
 
     public abstract double distance(DObject p);
@@ -60,19 +59,12 @@ public abstract class DObject {
     }
 
     public void setProcessed(){
-        // if(this.processed){
-        //     throw new IllegalStateException("\nObject " + this.ID + " already processed\n" );
-        // }
-        // else this.processed = true;
-        this.processed = true;
-    }
-
-    public void setProcessed(String where){
         if(this.processed){
-            throw new IllegalStateException("\nObject " + this.ID + " already processed in " + this.whereProcessed + " and now in " + where + "\n" );
+            throw new IllegalStateException("\nObject " + this.ID + " already processed \n" );
         }
-        this.processed = true;
-        this.whereProcessed = where;
+        else{
+            this.processed = true;
+        }
     }
 
     public void setReachabilityDistance(double rDistance){

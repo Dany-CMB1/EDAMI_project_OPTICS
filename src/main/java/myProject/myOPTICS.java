@@ -56,6 +56,9 @@ public class myOPTICS {
             this.orderSeedsupdate(obj, D);
             while(!this.orderSeeds.isEmpty()){
                 DObject currentObject = orderSeeds.poll();
+                if (orderSeeds.contains(currentObject)){
+                    throw new IllegalStateException("Object " + currentObject.getID() + " is still in orderSeeds after being polled");
+                }
 
                 currentObject.findNeighbors(D, this.epsilon);
                 currentObject.setProcessed();
@@ -81,15 +84,16 @@ public class myOPTICS {
                 double newReachDist = Math.max(core_distance, currentObject.distance(n));
 
                 // n is not in orderSeeds
-                if (Double.isNaN(n.getReachabilityDistance())){
-                    n.setReachabilityDistance(newReachDist);              
+                if (!orderSeeds.contains(n)){
+                    n.setReachabilityDistance(newReachDist);
+                    this.orderSeeds.add(n);              
                 }
                 // n is in orderSeeds ==> update reachability distance if newReachDist is smaller
                 else if (newReachDist < n.getReachabilityDistance()){
                     n.setReachabilityDistance(newReachDist);  
                     this.orderSeeds.remove(n);    
-                }
-                this.orderSeeds.add(n);
+                    this.orderSeeds.add(n);
+                }       
             }
         }   
     }

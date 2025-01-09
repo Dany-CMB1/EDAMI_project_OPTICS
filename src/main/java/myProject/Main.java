@@ -1,10 +1,15 @@
 package myProject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import jsat.ARFFLoader;
 import jsat.DataSet;
 import jsat.clustering.OPTICS;
+import myProject.DataExtractionMethod.IrisExtractionMethod;
+import myProject.Datatype.Iris;
 import myProject.utils.CSVToARFFConverter;
 
 public class Main {
@@ -22,18 +27,29 @@ public class Main {
         DataSet dataSet = ARFFLoader.loadArffFile(file);
         OPTICS opt = new OPTICS(4);
         opt.cluster(dataSet);
+        double[] expectedReachabilityDistances = opt.getReachabilityArray();  
 
-        // IrisExtractionMethod method = new IrisExtractionMethod();
-        // method.extractData("data/iris/iris.data");
-        // ArrayList<Iris> D = method.getData();
-        // try {
-        //     FileOutputStream OrderedFile = new FileOutputStream("output/iris/ordered.csv", false);
-        //     myOPTICS optics = new myOPTICS(0.5, 4);
-        //     optics.cluster(D, OrderedFile);
-        //     OrderedFile.close();
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-        // }
+        IrisExtractionMethod method = new IrisExtractionMethod();
+        method.extractData("data/iris/iris.data");
+        ArrayList<Iris> D = method.getData();
+        //radius = stats.getMean() + stats.getStandardDeviation() * 3;
+        try {
+            FileOutputStream OrderedFile = new FileOutputStream("output/iris/ordered.csv", false);
+            myOPTICS optics = new myOPTICS(0.5, 4);
+            optics.cluster(D, OrderedFile);
+            OrderedFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        double[] reachabilityDistances = new double[D.size()];
+        for (Iris iris : D) {
+            double reachabilityDistance = iris.getReachabilityDistance();
+            if (Double.isNaN(reachabilityDistance)) {
+                reachabilityDistance = Double.POSITIVE_INFINITY;
+            }
+            reachabilityDistances[iris.getID()] = reachabilityDistance;
+        }
 
+        System.out.println(reachabilityDistances == expectedReachabilityDistances);
     }
 }
