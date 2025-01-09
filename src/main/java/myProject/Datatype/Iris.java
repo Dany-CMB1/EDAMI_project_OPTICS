@@ -1,5 +1,7 @@
 package myProject.Datatype;
 
+import java.util.ArrayList;
+
 public class Iris extends DObject {
     protected double     sepal_length;
     protected double     sepal_width;
@@ -44,6 +46,15 @@ public class Iris extends DObject {
 
     public String getSpecies(){
         return this.species;
+    }
+
+    public ArrayList<Double> getValues(){
+        ArrayList<Double> values = new ArrayList<>();
+        values.add(this.sepal_length);
+        values.add(this.sepal_width);
+        values.add(this.petal_length);
+        values.add(this.petal_width);
+        return values;
     }
 
     //Setters

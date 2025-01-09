@@ -4,13 +4,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import DataMiningSandbox.DBPoint;
+import DataMiningSandbox.Optics;
 import jsat.ARFFLoader;
 import jsat.DataSet;
 import jsat.clustering.OPTICS;
 import myProject.DataExtractionMethod.IrisExtractionMethod;
 import myProject.Datatype.Iris;
 import myProject.utils.CSVToARFFConverter;
+import myProject.utils.ConvertProjectToDMS;
 import myProject.utils.DataSetStats;
 
 public class Main {
@@ -28,8 +32,7 @@ public class Main {
         DataSet dataSet = ARFFLoader.loadArffFile(file);
         OPTICS opt = new OPTICS(4);
         opt.cluster(dataSet);
-        double[] expectedReachabilityDistances = opt.getReachabilityArray();  
-
+        
         // Use custom OPTICS implementation
         IrisExtractionMethod method = new IrisExtractionMethod();
         method.extractData("data/iris/iris.data");
@@ -47,15 +50,10 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        double[] reachabilityDistances = new double[D.size()];
-        for (Iris iris : D) {
-            double reachabilityDistance = iris.getReachabilityDistance();
-            if (Double.isNaN(reachabilityDistance)) {
-                reachabilityDistance = Double.POSITIVE_INFINITY;
-            }
-            reachabilityDistances[iris.getID()] = reachabilityDistance;
-        }
-
-        System.out.println(reachabilityDistances == expectedReachabilityDistances);
+        
+        // Use DataMiningSandbox OPTICS implementation
+        DataMiningSandbox.Optics DMOptics = new Optics();
+        HashMap<Integer, DBPoint> dataset = ConvertProjectToDMS.convert(D);
+        DMOptics.optics(dataset, radius, 4);
     }
 }

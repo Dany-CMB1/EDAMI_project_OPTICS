@@ -1,5 +1,6 @@
 package myProject.Datatype;
 
+import java.util.ArrayList;
 public class Point2D extends DObject {
     protected double x;
     protected double y;
@@ -26,6 +27,13 @@ public class Point2D extends DObject {
 
     public double[] getCoordinates(){
         return new double[]{this.x, this.y};
+    }
+
+    public ArrayList<Double> getValues(){
+        ArrayList<Double> values = new ArrayList<>();
+        values.add(this.x);
+        values.add(this.y);
+        return values;
     }
 
     // Setters

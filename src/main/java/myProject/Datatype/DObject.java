@@ -55,6 +55,8 @@ public abstract class DObject {
         return neighborhood;
     }
 
+    public abstract ArrayList<Double> getValues();
+
     //Setters
     public void setID(int ID){
         this.ID = ID;
