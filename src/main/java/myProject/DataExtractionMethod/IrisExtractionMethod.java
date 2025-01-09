@@ -24,6 +24,9 @@ public class IrisExtractionMethod implements DataExtractionMethod{
             Scanner scanner = new Scanner(new File(path));
             scanner.useDelimiter("\n");
 
+            // Skip the first line
+            scanner.next();
+            
             int i = 0;
             while(scanner.hasNext()){
 

@@ -1,12 +1,13 @@
 @relation iris.data
 
-@attribute 5.1 numeric
-@attribute 3.5 numeric
-@attribute 1.4 numeric
-@attribute 0.2 numeric
-@attribute Iris-setosa {Iris-setosa,Iris-versicolor,Iris-virginica}
+@attribute sepal_length numeric
+@attribute ' sepal_width' numeric
+@attribute ' petal_length' numeric
+@attribute ' petal_width' numeric
+@attribute ' species' {Iris-setosa,Iris-versicolor,Iris-virginica}
 
 @data
+5.1,3.5,1.4,0.2,Iris-setosa
 4.9,3,1.4,0.2,Iris-setosa
 4.7,3.2,1.3,0.2,Iris-setosa
 4.6,3.1,1.5,0.2,Iris-setosa
