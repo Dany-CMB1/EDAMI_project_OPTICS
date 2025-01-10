@@ -14,7 +14,7 @@ import java.util.Set;
  * 
  */
 public class Optics {
-	List<DBPoint> list = new ArrayList<DBPoint>();
+	public List<DBPoint> list = new ArrayList<DBPoint>();
 
 	/**
 	 * This is the primary optics method that discovers seeds, considering

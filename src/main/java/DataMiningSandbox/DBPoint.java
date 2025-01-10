@@ -36,13 +36,14 @@ public class DBPoint {
 	 */
 	public ArrayList<Double> values = new ArrayList<>();
 	
+
+	public Integer ID = Undefined;
 	/**
 	 * @return the reachabilityDistance
 	 */
 	public double getReachabilityDistance() {
 		return reachabilityDistance;
 	}
-
 
 	/**
 	 * ={ UNDEFINED if |Neps(p)|<MinPts
@@ -119,6 +120,7 @@ public class DBPoint {
 	 * @return double The distance from the minPoints-th point.  Undefined if min points not reached yet.
 	 */
 	public double getCoreDistance(List<DBPoint> list, double eps, int minPoints) {
+		System.out.println("getCoreDistance call : \n\tlist.size() = " + list.size() + "\n\tminPoints = " + minPoints);
 		if (list.size() < minPoints) {
 			return Undefined;
 		}
@@ -127,6 +129,7 @@ public class DBPoint {
 		if (eps < distance) {
 			return Undefined;
 		}
+		System.out.println("getCoreDistance return : " + distance);
 		return this.distanceTo(pointB);
 	}
 }

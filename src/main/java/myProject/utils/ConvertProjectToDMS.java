@@ -13,6 +13,7 @@ public class ConvertProjectToDMS {
         for (DObject obj : D) {
             DBPoint point = new DBPoint();
             point.values = obj.getValues();
+            point.ID = obj.getID();
             dataset.put(obj.getID(), point);
         }
         return dataset;

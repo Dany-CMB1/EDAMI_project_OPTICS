@@ -1,6 +1,4 @@
 package myProject;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -33,25 +31,24 @@ public class myOPTICS {
     }
 
     // OPTICS main loop
-    public void cluster(ArrayList<? extends DObject> D, FileOutputStream OrderedFile)  throws IOException { 
+    public void cluster(ArrayList<? extends DObject> D, ArrayList<Integer> orderedFile) { 
 
         for (DObject o : D){
             if (!o.isProcessed()){
-                this.ExpandClusterOrder(D, o, OrderedFile);
+                this.ExpandClusterOrder(D, o, orderedFile);
             }
         }
     }
 
     // Expand a cluster order
-    private void ExpandClusterOrder(ArrayList<? extends DObject> D, DObject obj, FileOutputStream OrderedFile) throws IOException {
+    private void ExpandClusterOrder(ArrayList<? extends DObject> D, DObject obj, ArrayList<Integer> orderedFile) {
 
         obj.findNeighbors(D, this.epsilon);
         obj.setProcessed();
         obj.setReachabilityDistance(Double.NaN);
         obj.setCoreDistance(D, this.MinPts);
 
-        String line = obj.getID() +"\n";
-        OrderedFile.write(line.getBytes());
+        orderedFile.add(obj.getID());
 
         // If the object is a core object, find new expansion candidates
         if (!Double.isNaN(obj.getCoreDistance())){
@@ -66,8 +63,7 @@ public class myOPTICS {
                 currentObject.setProcessed();
                 currentObject.setCoreDistance(D, this.MinPts);
 
-                line = currentObject.getID() +"\n";
-                OrderedFile.write(line.getBytes());
+                orderedFile.add(currentObject.getID());
 
                 if (!Double.isNaN(currentObject.getCoreDistance())){
                     this.orderSeedsupdate(currentObject, D);
