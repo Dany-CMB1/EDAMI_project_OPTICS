@@ -14,6 +14,7 @@ public abstract class DObject {
     protected double reachabilityDistance = Double.NaN;
     protected double coreDistance = Double.NaN;
     protected boolean processed = false;
+    public  ArrayList<Double> distancesToNeighbors = new ArrayList<>();
     // Array of intergers containing the IDs of the neighbors of the object
     protected ArrayList<Integer> neighbors = new ArrayList<>();
 
@@ -82,16 +83,16 @@ public abstract class DObject {
         ArrayList<? extends DObject> neighborhood = this.getNeighbors(D);
 
         // Find the MinPts-th closest neighbor and set the core distance to the distance to that neighbor
-        ArrayList<Double> distancesToNeighbors = new ArrayList<>();
+        // ArrayList<Double> distancesToNeighbors = new ArrayList<>();
         for (DObject n : neighborhood){
-            distancesToNeighbors.add(this.distance(n));
+            this.distancesToNeighbors.add(this.distance(n));
             if (++countedNeighbors == MinPts){
                 break;
             }
         }
-        distancesToNeighbors.sort(null);
+        this.distancesToNeighbors.sort(null);
         if (countedNeighbors >= MinPts){
-            this.coreDistance = distancesToNeighbors.get(MinPts - 1);
+            this.coreDistance = this.distancesToNeighbors.get(MinPts - 2);
         }else{
             this.coreDistance = Double.NaN;
         }
@@ -102,10 +103,10 @@ public abstract class DObject {
     }
 
     //Find the neighbors of the object within a distance epsilon
-    //The object itself is not counted as a neighbor
+    //!  An object is NOT considered as a neighbor of itself ! 
     public void findNeighbors(ArrayList<? extends DObject> D, double epsilon){
         for (DObject q : D){
-            if (this.getID() != q.getID() && this.distance(q) <= epsilon){
+            if (this.getID() != q.getID() && this.distance(q) <= epsilon && this.neighbors.indexOf(q.getID()) == -1){
                 this.neighbors.add(q.getID());
             }
         }

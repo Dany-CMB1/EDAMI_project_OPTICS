@@ -1,5 +1,6 @@
 from sklearn.cluster import OPTICS
 import csv
+import math
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -20,18 +21,18 @@ D = pd.DataFrame(pd.read_csv('data/2d/2spiral.csv', header=None,
     names=["x", "y", "Class"],
     dtype={"x": float, "y": float, "Class": "category"}))
 
-optics = OPTICS(min_samples=4, max_eps=1, cluster_method='dbscan')
+optics = OPTICS(min_samples=3, max_eps=5.577012574282855, metric="euclidean", cluster_method='xi')
 optics.fit(D[["x", "y"]])
 
-file = open('output/2d/expectedRDists.csv', 'w')
-for o in optics.reachability_:
-    file.write(str(o) + '\n')
+file = open('output/2d/2spiral/expectedRDists.csv', 'w')
+for rdist in optics.reachability_:
+    file.write(str(rdist) + '\n')
 file.close()
 
-file = open('output/2d/expectedCDists.csv', 'w')
-for o in optics.core_distances_:
-    file.write(str(o) + '\n')
+file = open('output/2d/2spiral/expectedCDists.csv', 'w')
+for cdist in optics.core_distances_:
+    file.write(str(cdist) + '\n')
 file.close()    
 
-plt.scatter(D.x, D.y, c=optics.labels_)
-plt.show()
+# plt.scatter(D.x, D.y, c=optics.labels_)
+# plt.show()

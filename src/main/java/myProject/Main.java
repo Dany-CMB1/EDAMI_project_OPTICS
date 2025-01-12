@@ -12,13 +12,13 @@ import myProject.utils.DataSetStats;
 public class Main {
     public static void main(String[] args) {
 
-        final int minPoints = 4;
-        final double eps = 1;
-        final String dataFolder = "data";
+        final int minPoints = 3;
+        final double eps = Math.sqrt(2);
         final String category = "2d";
-        final String fileName = "2spiral.csv";
-        String filePath = dataFolder + "/" + category + "/" + fileName;
-        String arffPath = dataFolder + "/" + category + "/" + fileName.replace(".csv", ".arff");
+        final String datasetName = "2spiral";
+        String datasetFile = "data/" + category + "/" + datasetName + ".csv";
+        String outputDir = "output/" + category + "/" + datasetName + "/";
+        String arffPath = "data/" + category + "/" + datasetName + ".arff";
 
         // Convert CSV to ARFF
         // try {
@@ -36,21 +36,36 @@ public class Main {
         
         // Use custom OPTICS implementation
         Point2DExtractionMethod method = new Point2DExtractionMethod();
-        method.extractData(filePath);
+        method.extractData(datasetFile);
         ArrayList<Point2D> D = method.getData();
 
         // Estimate radius as done in jsat.clustering.OPTICS.cluster
         DataSetStats stats = new DataSetStats(D, 4);
+        System.out.println("Mean: " + stats.getMean());
+        System.out.println("Standard Deviation: " + stats.getStandardDeviation());
         double radius = stats.getMean() + stats.getStandardDeviation() * 3;
+        System.out.println("Radius: " + radius);
 
 
         ArrayList<Integer> orderedFile = new ArrayList<>();
-        myOPTICS optics = new myOPTICS(eps, minPoints);
+        myOPTICS optics = new myOPTICS(radius, minPoints);
         optics.cluster(D, orderedFile);
 
+        // for (Point2D o : D) {
+        //     System.out.println("Object: " + o.getID() + " (" + o.getX() + ", " + o.getY() + ")");
+        //     System.out.println("\tNeighbors: " + o.getNeighborsID());
+        //     for (DObject n : o.getNeighbors(D)) {
+        //         System.out.println("\t\tNeighbor: " + n.getID() + " (" + ((Point2D)n).getX() + ", " + ((Point2D)n).getY() + ")");
+        //     }
+        //     System.out.println("\tDistance to neighbors: " + o.distancesToNeighbors);
+        //     System.out.println("\tCore Distance: " + o.getCoreDistance());
+        //     System.out.println("\tReachability Distance: " + o.getReachabilityDistance());
+        // }
+        // System.out.println("Ordered File: " + orderedFile);
+
         try {
-            FileWriter rDistsFile = new FileWriter("output/2d/RDists.csv");
-            FileWriter cDistsFile = new FileWriter("output/2d/CDists.csv");
+            FileWriter rDistsFile = new FileWriter(outputDir + "RDists.csv");
+            FileWriter cDistsFile = new FileWriter(outputDir + "CDists.csv");
             for (DObject o : D){
                 rDistsFile.write(o.getReachabilityDistance() + "\n");
                 cDistsFile.write(o.getCoreDistance() + "\n");
