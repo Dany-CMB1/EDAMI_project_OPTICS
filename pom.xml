@@ -30,16 +30,6 @@
             <artifactId>jfreechart</artifactId>
             <version>1.5.5</version>
         </dependency>
-        <dependency>
-            <groupId>com.edwardraff</groupId>
-            <artifactId>JSAT</artifactId>
-            <version>0.0.9</version>
-        </dependency>
-        <dependency>
-            <groupId>nz.ac.waikato.cms.weka</groupId>
-            <artifactId>weka-stable</artifactId>
-            <version>3.8.0</version>
-        </dependency>
     </dependencies>
     
     <build>

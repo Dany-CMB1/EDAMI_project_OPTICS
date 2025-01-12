@@ -35,7 +35,10 @@ for i in range(1, len(sys.argv)):
 
 if (datafile == None):
     datafile = 'data/'+ category + '/' + dataset + '.csv'
-    outputDir = 'output/' + category + '/' + dataset + '/'
+    if (category == dataset):
+        outputDir = 'output/' + category + '/'
+    else:
+        outputDir = 'output/' + category + '/' + dataset + '/'
 
 
 D = readFile(datafile, category)

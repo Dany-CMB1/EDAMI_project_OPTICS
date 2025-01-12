@@ -6,7 +6,7 @@ def readFile(file, category):
             dtype={"x": float, "y": float, "Class": "category"}))
             
     elif (category == 'iris'):
-            D = pd.DataFrame(pd.read_csv('data/iris/iris.data', header=None,
+            D = pd.DataFrame(pd.read_csv(file, header=None,
             names=["SepalLength", "SepalWidth", "PetalLength", "PetalWidth", "Class"],
             dtype={"PetalLength": float, "PetalWidth": float, "SepalLength": float, "SepalWidth": float, "Class": "category"}))
     else:
