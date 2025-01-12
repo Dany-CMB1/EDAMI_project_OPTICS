@@ -7,31 +7,14 @@ from sklearn.cluster import OPTICS
 import sys
 
 datafile = None
-for i in range(1, len(sys.argv)):
-    
-    if sys.argv[i] in ('-dataset', '-d'):
-        dataset = sys.argv[i+1]
-        
-    if sys.argv[i] in ('-category', '-c'):
-        category = sys.argv[i+1]
-        
-    if sys.argv[i] in ('-file', '-f'):
-        datafile = sys.argv[i+1]
-        filename = datafile.split('.')
-        if (filename[-1] != 'csv'):
-            raise Exception("Input file must be CSV")
-        else:
-            outputDir = 'output/' + filename + '/'  
+argv = pd.DataFrame(pd.read_csv("PythonArgs.csv", header=None,
+            names=["Datatype", "Dataset", "MinPts", "Eps"],
+            dtype={"Datatype": str, "Dataset": str, "MinPts": int, "Eps": float}))
 
-    if sys.argv[i] in ('-eps'):
-        eps = float(sys.argv[i+1])
-        if eps < 1:
-            raise Exception("Epsilon should be greater than 2")
-        
-    if sys.argv[i] in ('-minPts'):
-        minPts = int(sys.argv[i+1])
-        if minPts < 0:
-            raise Exception("MinPts should be greater than 1")
+category = argv["Datatype"][0]
+dataset = argv["Dataset"][0]
+minPts = argv["MinPts"][0]
+eps = argv["Eps"][0]
 
 if (datafile == None):
     datafile = 'data/'+ category + '/' + dataset + '.csv'
@@ -76,4 +59,4 @@ plotGraphs(D, optics, expectedRDists, obtainedRDists, expectedCDists, obtainedCD
 
 # Print verification for ordered file
 if (expectedOrderedFile.all() == obtainedOrderedFile.all()):
-    print("The ordered file is correct")
+    print("\n > The ordered file is correct <\n")

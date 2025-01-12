@@ -1,7 +1,9 @@
 package myProject;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import myProject.DataExtractionMethod.DataExtractionMethod;
 import myProject.DataExtractionMethod.DataExtractionMethodFactory;
@@ -12,9 +14,19 @@ import myProject.utils.DataSetStats;
 public class Main {
     public static void main(String[] args) throws Exception {
 
-        final String category = args[0];
-        final String datasetName = args[1];
-        final int minPoints = Integer.parseInt(args[2]);
+        // Read arguments from file
+        Scanner scanner = new Scanner(new File("JavaArgs.csv"));
+        scanner.useDelimiter("\n");
+
+        // Skip the first line
+        scanner.next();
+
+        String[] fargs = scanner.next().split(",");
+        scanner.close();
+
+        final String category = fargs[0];
+        final String datasetName = fargs[1];
+        final int minPoints = Integer.parseInt(fargs[2]);
 
         System.out.println("Calling Main with arguments: ");
         System.out.println("\tCategory: " + category);
@@ -53,21 +65,21 @@ public class Main {
         myOPTICS optics = new myOPTICS(radius, minPoints);
         optics.cluster(D, orderedFile);
 
-        try {
-            FileWriter rDistsFileWriter = new FileWriter(outputDir + "RDists.csv");
-            FileWriter cDistsFileWriter = new FileWriter(outputDir + "CDists.csv");
-            FileWriter orderedFileWriter = new FileWriter(outputDir + "orderedFile.csv");
-            for (DObject o : D){
-                rDistsFileWriter.write(o.getReachabilityDistance() + "\n");
-                cDistsFileWriter.write(o.getCoreDistance() + "\n");
-                orderedFileWriter.write(o.getID() + "\n");
-            }
-            rDistsFileWriter.close();
-            cDistsFileWriter.close();
-            orderedFileWriter.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        FileWriter rDistsFileWriter = new FileWriter(outputDir + "RDists.csv");
+        FileWriter cDistsFileWriter = new FileWriter(outputDir + "CDists.csv");
+        FileWriter orderedFileWriter = new FileWriter(outputDir + "orderedFile.csv");
+        for (DObject o : D){
+            rDistsFileWriter.write(o.getReachabilityDistance() + "\n");
+            cDistsFileWriter.write(o.getCoreDistance() + "\n");
+            orderedFileWriter.write(o.getID() + "\n");
         }
+        rDistsFileWriter.close();
+        cDistsFileWriter.close();
+        orderedFileWriter.close();
 
+        //Write Python args file
+        FileWriter argsFileWriter = new FileWriter("PythonArgs.csv");
+        argsFileWriter.write(category + "," + datasetName + "," + minPoints + ","+ radius + "\n");
+        argsFileWriter.close();
     }
 }
