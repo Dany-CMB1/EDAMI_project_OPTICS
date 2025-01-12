@@ -29,4 +29,19 @@ public class DataSetStats {
     public double getStandardDeviation() {
         return this.standardDeviation;
     }
+
+    public static void printDatasetInfo(ArrayList<? extends DObject> D) {
+        DataSetStats stats = new DataSetStats(D, 4);
+        System.out.println("Mean: " + stats.getMean());
+        System.out.println("Standard Deviation: " + stats.getStandardDeviation());
+        final double radius = stats.getMean() + stats.getStandardDeviation() * 3;
+        System.out.println("Radius: " + radius + "\n");
+
+
+        for (DObject o : D) {
+            System.out.println("Object: " + o.getID());
+            System.out.println("\tNeighbors: " + o.getNeighborsID());
+            System.out.println("\tCore Distance: " + o.getCoreDistance());
+        }
+    }
 }

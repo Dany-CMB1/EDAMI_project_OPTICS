@@ -14,7 +14,7 @@ public abstract class DObject {
     protected double reachabilityDistance = Double.NaN;
     protected double coreDistance = Double.NaN;
     protected boolean processed = false;
-    public  ArrayList<Double> distancesToNeighbors = new ArrayList<>();
+
     // Array of intergers containing the IDs of the neighbors of the object
     protected ArrayList<Integer> neighbors = new ArrayList<>();
 
@@ -83,16 +83,16 @@ public abstract class DObject {
         ArrayList<? extends DObject> neighborhood = this.getNeighbors(D);
 
         // Find the MinPts-th closest neighbor and set the core distance to the distance to that neighbor
-        // ArrayList<Double> distancesToNeighbors = new ArrayList<>();
+        ArrayList<Double> distancesToNeighbors = new ArrayList<>();
         for (DObject n : neighborhood){
-            this.distancesToNeighbors.add(this.distance(n));
+            distancesToNeighbors.add(this.distance(n));
             if (++countedNeighbors == MinPts){
                 break;
             }
         }
-        this.distancesToNeighbors.sort(null);
+        distancesToNeighbors.sort(null);
         if (countedNeighbors >= MinPts){
-            this.coreDistance = this.distancesToNeighbors.get(MinPts - 2);
+            this.coreDistance = distancesToNeighbors.get(MinPts - 2);
         }else{
             this.coreDistance = Double.NaN;
         }
