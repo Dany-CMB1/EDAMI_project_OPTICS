@@ -17,40 +17,39 @@ public class IrisExtractionMethod implements DataExtractionMethod{
     }
 
     @Override
-    public void extractData(String path){
+    public void extractData(String path) throws Exception {
 
         this.data = new ArrayList<>();
 
-        try {
-            Scanner scanner = new Scanner(new File(path));
-            scanner.useDelimiter("\n");
+        Scanner scanner = new Scanner(new File(path));
+        scanner.useDelimiter("\n");
 
-            // Skip the first line
-            scanner.next();
-            
-            int i = 0;
-            while(scanner.hasNext()){
+        // Skip the first line
+        scanner.next();
+        
+        int i = 0;
+        while(scanner.hasNext()){
 
-                String line = scanner.next();
-                String[] parts = line.split(",");
+            String line = scanner.next();
 
-                Iris iris = new Iris();
-
-                iris.setSepalLength(Double.parseDouble(parts[0]));
-                iris.setSepalWidth(Double.parseDouble(parts[1]));
-                iris.setPetalLength(Double.parseDouble(parts[2]));
-                iris.setPetalWidth(Double.parseDouble(parts[3]));
-                iris.setSpecies(parts[4]);
-                iris.setID(i);
-
-                this.data.add(iris);
-
-                i++;
+            if (line.isEmpty()){
+                break;
             }
-            scanner.close();
+            String[] parts = line.split(",");
 
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            Iris iris = new Iris();
+
+            iris.setSepalLength(Double.parseDouble(parts[0]));
+            iris.setSepalWidth(Double.parseDouble(parts[1]));
+            iris.setPetalLength(Double.parseDouble(parts[2]));
+            iris.setPetalWidth(Double.parseDouble(parts[3]));
+            iris.setSpecies(parts[4]);
+            iris.setID(i);
+
+            this.data.add(iris);
+
+            i++;
         }
+        scanner.close();
     }
 }

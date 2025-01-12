@@ -9,17 +9,15 @@ public class DataSetStats {
     private double mean;
     private double standardDeviation;
 
-    public DataSetStats(ArrayList<? extends DObject> D, int maxSamples) throws Exception {
+    public DataSetStats(ArrayList<? extends DObject> D, int maxSamples){
         ArrayList<Double> neighborDistances = new ArrayList<>();
         for (DObject obj : D) {
-            System.out.println(obj.toString());
             obj.findNeighbors(D, maxSamples);
             for (DObject neighbor : obj.getNeighbors(D)) {
                 neighborDistances.add(obj.distance(neighbor));
             }
         }
 
-        System.out.println(neighborDistances);
         this.mean = neighborDistances.stream().mapToDouble(Double::doubleValue).average().orElse(Double.NaN);
         this.standardDeviation = Math.sqrt(neighborDistances.stream().mapToDouble(d -> Math.pow(d - this.mean, 2)).sum() / neighborDistances.size());
     }

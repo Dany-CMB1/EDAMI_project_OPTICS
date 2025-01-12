@@ -15,34 +15,34 @@ public class Point2DExtractionMethod implements DataExtractionMethod{
     }
 
     @Override
-    public void extractData(String path){
+    public void extractData(String path) throws Exception {
 
         this.data = new ArrayList<>();
 
-        try {
-            Scanner scanner = new Scanner(new File(path));
-            scanner.useDelimiter("\n");
+        Scanner scanner = new Scanner(new File(path));
+        scanner.useDelimiter("\n");
 
-            int i = 0;
-            while(scanner.hasNext()){
+        int i = 0;
+        while(scanner.hasNext()){
 
-                String line = scanner.next();
-                String[] parts = line.split(",");
-
-                Point2D point = new Point2D();
-
-                point.setX(Double.parseDouble(parts[0]));
-                point.setY(Double.parseDouble(parts[1]));
-                point.setID(i);
-
-                this.data.add(point);
-
-                i++;
+            String line = scanner.next();
+            if (line.isEmpty()){
+                break;
             }
+            String[] parts = line.split(",");
 
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            Point2D point = new Point2D();
+
+            point.setX(Double.parseDouble(parts[0]));
+            point.setY(Double.parseDouble(parts[1]));
+            point.setID(i);
+
+            this.data.add(point);
+
+            i++;
         }
+        scanner.close();
+
     }
 }
 

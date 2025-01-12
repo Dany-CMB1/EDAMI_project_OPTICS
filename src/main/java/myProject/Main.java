@@ -16,34 +16,25 @@ public class Main {
         final String datasetName = args[1];
         final int minPoints = Integer.parseInt(args[2]);
 
+        System.out.println("Calling Main with arguments: ");
+        System.out.println("\tCategory: " + category);
+        System.out.println("\tDataset: " + datasetName);
+        System.out.println("\tMinPoints: " + minPoints);
+
         // Unique dataset for the datatype, eg iris
-        String datasetFile = "";
-        String outputDir = "";
-        String arffPath = "";
+        String datasetFile = new String();
+        String outputDir = new String();
 
         if (category.equals(datasetName)){
             outputDir = "output/" + category +"/";
         }
         else{
-            datasetFile = "data/" + category + "/" + datasetName + ".csv";
             outputDir = "output/" + category + "/" + datasetName + "/";
-            arffPath = "data/" + category + "/" + datasetName + ".arff";
         }
-        // Convert CSV to ARFF
-        // try {
-        //     CSVToARFFConverter.convert(filePath, arffPath);
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
+        datasetFile = "data/" + category + "/" + datasetName + ".csv";
 
-        // // Use JSAT OPTICS implementation
-        // File file = new File(arffPath);
-        // DataSet dataSet = ARFFLoader.loadArffFile(file);
-        // OPTICS opt = new OPTICS(4);
-        // opt.cluster(dataSet);
-        // double[] expectedRDists = opt.getReachabilityArray();
-        
-        // Use custom OPTICS implementation
+        System.out.println("Dataset File: " + datasetFile);
+        System.out.println("Output Directory: " + outputDir);
 
         // Choose appropriate data extraction method
         DataExtractionMethod method = DataExtractionMethodFactory.getMethod(category);
