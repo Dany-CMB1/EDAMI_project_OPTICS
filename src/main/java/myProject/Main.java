@@ -3,22 +3,32 @@ package myProject;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
-import myProject.DataExtractionMethod.Point2DExtractionMethod;
+import myProject.DataExtractionMethod.DataExtractionMethod;
+import myProject.DataExtractionMethod.DataExtractionMethodFactory;
 import myProject.Datatype.DObject;
-import myProject.Datatype.Point2D;
 import myProject.utils.DataSetStats;
 
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
-        final int minPoints = 3;
-        final String category = "2d";
-        final String datasetName = "2spiral";
-        String datasetFile = "data/" + category + "/" + datasetName + ".csv";
-        String outputDir = "output/" + category + "/" + datasetName + "/";
-        String arffPath = "data/" + category + "/" + datasetName + ".arff";
+        final String category = args[0];
+        final String datasetName = args[1];
+        final int minPoints = Integer.parseInt(args[2]);
 
+        // Unique dataset for the datatype, eg iris
+        String datasetFile = "";
+        String outputDir = "";
+        String arffPath = "";
+
+        if (category.equals(datasetName)){
+            outputDir = "output/" + category +"/";
+        }
+        else{
+            datasetFile = "data/" + category + "/" + datasetName + ".csv";
+            outputDir = "output/" + category + "/" + datasetName + "/";
+            arffPath = "data/" + category + "/" + datasetName + ".arff";
+        }
         // Convert CSV to ARFF
         // try {
         //     CSVToARFFConverter.convert(filePath, arffPath);
@@ -34,12 +44,14 @@ public class Main {
         // double[] expectedRDists = opt.getReachabilityArray();
         
         // Use custom OPTICS implementation
-        Point2DExtractionMethod method = new Point2DExtractionMethod();
+
+        // Choose appropriate data extraction method
+        DataExtractionMethod method = DataExtractionMethodFactory.getMethod(category);
         method.extractData(datasetFile);
-        ArrayList<Point2D> D = method.getData();
+        ArrayList<? extends DObject> D = method.getData();
 
         // Estimate radius as done in jsat.clustering.OPTICS.cluster
-        DataSetStats stats = new DataSetStats(D, 4);
+        DataSetStats stats = new DataSetStats(D, 6);
         System.out.println("Mean: " + stats.getMean());
         System.out.println("Standard Deviation: " + stats.getStandardDeviation());
         final double radius = stats.getMean() + stats.getStandardDeviation() * 3;
@@ -51,30 +63,20 @@ public class Main {
         optics.cluster(D, orderedFile);
 
         try {
-            FileWriter rDistsFile = new FileWriter(outputDir + "RDists.csv");
-            FileWriter cDistsFile = new FileWriter(outputDir + "CDists.csv");
+            FileWriter rDistsFileWriter = new FileWriter(outputDir + "RDists.csv");
+            FileWriter cDistsFileWriter = new FileWriter(outputDir + "CDists.csv");
+            FileWriter orderedFileWriter = new FileWriter(outputDir + "orderedFile.csv");
             for (DObject o : D){
-                rDistsFile.write(o.getReachabilityDistance() + "\n");
-                cDistsFile.write(o.getCoreDistance() + "\n");
+                rDistsFileWriter.write(o.getReachabilityDistance() + "\n");
+                cDistsFileWriter.write(o.getCoreDistance() + "\n");
+                orderedFileWriter.write(o.getID() + "\n");
             }
-            rDistsFile.close();
-            cDistsFile.close();
+            rDistsFileWriter.close();
+            cDistsFileWriter.close();
+            orderedFileWriter.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        // Use DataMiningSandbox OPTICS implementation
-        // DataMiningSandbox.Optics DMOptics = new Optics();
-        // HashMap<Integer, DBPoint> dataset = ConvertProjectToDMS.convert(D);
-        // DMOptics.optics(dataset, radius, 4);
-        // ArrayList<Integer> orderedFile_DMS = new ArrayList<>();
-        // for (DBPoint point :  DMOptics.list) {
-        //     orderedFile_DMS.add(point.ID);
-        // }
 
-        // Compare results
-        // System.out.println("myProject OPTICS: " + orderedFile);
-        // System.out.println("DataMiningSandbox OPTICS: " + orderedFile_DMS);
-        // System.out.println(orderedFile.equals(orderedFile_DMS));
     }
 }

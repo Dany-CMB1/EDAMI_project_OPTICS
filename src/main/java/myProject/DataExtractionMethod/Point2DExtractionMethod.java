@@ -9,6 +9,7 @@ public class Point2DExtractionMethod implements DataExtractionMethod{
     
     private ArrayList<Point2D> data;
 
+    @Override
     public ArrayList<Point2D> getData(){
         return this.data;
     }

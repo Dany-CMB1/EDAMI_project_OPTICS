@@ -11,6 +11,7 @@ public class IrisExtractionMethod implements DataExtractionMethod{
     
     private ArrayList<Iris> data;
 
+    @Override
     public ArrayList<Iris> getData(){
         return this.data;
     }
