@@ -53,21 +53,28 @@ def plotGraphs(D, optics, obtainedRDists, obtainedCDists, obtainedOrdered, outpu
                 currRow+=1
     
         # Reachability distances vs ordered objects
-        obtainedRDistsOrdered = obtainedRDists[obtainedOrdered]
-        expectedRDistsOrdered = expectedRDists[obtainedOrdered]
+        # Convert obtainedOrdered to an array of indices
+
+        # Reorder distances based on the ordered indices in obtainedOrdered
+        obtainedRDistsOrdered = [obtainedRDists[i] for i in obtainedOrdered]
+        expectedRDistsOrdered = [optics.reachability_[i] for i in obtainedOrdered]
+        relCDistsOrdered = [relCDists[i] for i in obtainedOrdered]
+        relRDistsOrdered = [relRDists[i] for i in obtainedOrdered]
         
         ax2 = fig.add_subplot(gs[currRow])
-        ax2.plot(obtainedOrdered, expectedRDistsOrdered, label='Expected', color='blue')
+        ax2.plot(expectedRDistsOrdered, label='Expected', color='blue')
         ax2.set_xlabel('Ordered Objects')
         ax2.set_ylabel('Expected Reachability Distances', color='blue')
         ax2.tick_params(axis='y', labelcolor='blue')
         ax2.set_title('Reachability Distances vs Ordered Objects')
         ax2.set_xlim(0, len(expectedRDists))
+        ax2.set_ylim(ymin=0)
         
         ax22 = ax2.twinx()
-        ax22.plot(obtainedOrdered, obtainedRDistsOrdered, label='Obtained', color='red')
+        ax22.plot(obtainedRDistsOrdered, label='Obtained', color='red')
         ax22.set_ylabel('Obtained Reachability Distances', color='red')
         ax22.tick_params(axis='y', labelcolor='red')
+        ax22.set_ylim(ymin=0, ymax=ax2.get_ylim()[1])
         
         ax2.legend(loc='upper left')
         ax22.legend(loc='upper right')
@@ -80,26 +87,26 @@ def plotGraphs(D, optics, obtainedRDists, obtainedCDists, obtainedOrdered, outpu
         fig2, (ax3, ax4) = plt.subplots(1, 2, figsize=(12, 6))
         
         # Core distances difference
-        ax3.plot(np.arange(len(expectedCDists)), relCDists, label='Core Distances Difference', color='green')
-        ax3.set_xlabel('Object ID')
+        ax3.plot(np.arange(len(expectedCDists)), relCDistsOrdered, label='Core Distances Difference', color='green')
+        ax3.set_xlabel('Ordered Object ID')
         ax3.set_ylabel('Relative Difference (%)')
         ax3.set_title('Core Distances Difference')
         ax3.set_ylim(0)
         ax3.set_xlim(0, len(expectedCDists))
         # Display statistics, exclude nan values
-        ax3.text(0.5, 0.5, 'Mean: {:.2f}%\nMax: {:.2f}%\nMin: {:.2f}%'.format(np.nanmean(relCDists), np.nanmax(relCDists), np.nanmin(relCDists)),
-                 horizontalalignment='center', verticalalignment='center', transform=ax3.transAxes)
+        string = 'Mean: {:.2f}%\nStd: {:.2f}%\nMax: {:.2f}%\nMin: {:.2f}%'.format(np.nanmean(relCDists), np.nanstd(relCDists), np.nanmax(relCDists), np.nanmin(relCDists))
+        ax3.text(0.5, 0.5,string, horizontalalignment='center', verticalalignment='center', transform=ax3.transAxes)
         
         # Reachability distances difference
-        ax4.plot(np.arange(len(expectedRDists)), relRDists, label='Reachability Distances Difference', color='orange')
-        ax4.set_xlabel('Object ID')
+        ax4.plot(np.arange(len(expectedRDists)), relRDistsOrdered, label='Reachability Distances Difference', color='orange')
+        ax4.set_xlabel('Ordered Object ID')
         ax4.set_ylabel('Relative Difference (%)')
         ax4.set_title('Reachability Distances Difference')
         ax4.set_ylim(0)
         ax4.set_xlim(0, len(expectedRDists))
         # Display statistics, exclude nan values
-        ax4.text(0.5, 0.5, 'Mean: {:.2f}%\nMax: {:.2f}%\nMin: {:.2f}%'.format(np.nanmean(relRDists), np.nanmax(relRDists), np.nanmin(relRDists)),
-                horizontalalignment='center', verticalalignment='center', transform=ax4.transAxes)
+        string = 'Mean: {:.2f}%\nStd: {:.2f}%\nMax: {:.2f}%\nMin: {:.2f}%'.format(np.nanmean(relRDists), np.nanstd(relRDists), np.nanmax(relRDists), np.nanmin(relRDists))
+        ax4.text(0.5, 0.5, string, horizontalalignment='center', verticalalignment='center', transform=ax4.transAxes)
         
         # Save the second figure
         plt.tight_layout()

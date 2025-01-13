@@ -84,10 +84,12 @@ public class Main {
         for (DObject o : D){
             rDistsFileWriter.write(o.getReachabilityDistance() + "\n");
             cDistsFileWriter.write(o.getCoreDistance() + "\n");
-            orderedFileWriter.write(o.getID() + "\n");
         }
         rDistsFileWriter.close();
         cDistsFileWriter.close();
+        for (int i : orderedFile){
+            orderedFileWriter.write(i + "\n");
+        }
         orderedFileWriter.close();
 
         //Pass compareResults.py args to file

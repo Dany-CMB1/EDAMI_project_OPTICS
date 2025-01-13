@@ -57,11 +57,20 @@ with open(outputDir + 'orderedFile.csv', 'r') as file:
 
 plotGraphs(D, optics, obtainedRDists, obtainedCDists, obtainedOrderedFile, outputDir)
 
-# Write to outputfile verification for ordered file
-counter = sum(1 for i in range(len(D)) if obtainedOrderedFile[i] == optics.ordering_[i])
+# Verify the ordered file
+counter = 0
+for i in range(len(D)):
+    if obtainedOrderedFile[i] == optics.ordering_[i]:
+        counter += 1
 
+# Write expected ordered file to the output directory
+with open(outputDir + 'expectedOrderedFile.csv', 'w') as file:
+    for i in optics.ordering_:
+        file.write(str(i) + '\n')
+        
+# Write verification results to the output file
 with open(outputDir + 'verification.txt', 'w') as file:
     if counter == len(D):
-        file.write('The ordered file is correct')
+        file.write('The ordered file is correct\n')
     else:
-        file.write('The ordered file is incorrect')
+        file.write('The ordered file is incorrect. Expected OrderedFile can be found in + ' + outputDir + 'expectedOrderedFile.csv\n')
