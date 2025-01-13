@@ -7,7 +7,7 @@ from sklearn.cluster import OPTICS
 import sys
 
 datafile = None
-argv = pd.DataFrame(pd.read_csv("PythonArgs.csv", header=None,
+argv = pd.DataFrame(pd.read_csv("args.csv", header=0,
             names=["Datatype", "Dataset", "MinPts", "Eps"],
             dtype={"Datatype": str, "Dataset": str, "MinPts": int, "Eps": float}))
 

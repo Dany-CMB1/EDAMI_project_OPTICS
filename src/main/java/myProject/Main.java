@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         // Read arguments from file
-        Scanner scanner = new Scanner(new File("JavaArgs.csv"));
+        Scanner scanner = new Scanner(new File("args.csv"));
         scanner.useDelimiter("\n");
 
         // Skip the first line
@@ -29,6 +29,7 @@ public class Main {
         final String category = fargs[0];
         final String datasetName = fargs[1];
         final int minPoints = Integer.parseInt(fargs[2]);
+        final double radius = Double.parseDouble(fargs[3]);
 
         System.out.println("Calling Main with arguments: ");
         System.out.println("\tCategory: " + category);
@@ -66,13 +67,13 @@ public class Main {
             throw new Exception("No data found. Please check the dataset.");
         }
 
-        // Estimate radius as done in jsat.clustering.OPTICS.cluster
+        // rpint dataset info
         DataSetStats stats = new DataSetStats(D, minPoints+1);
-        final double radius = stats.getMean() + stats.getStandardDeviation() * 3;
         stats.printDatasetInfo(D, "summary");
 
 
         // Run OPTICS
+        System.out.println("Running OPTICS with minPoints=" + minPoints + ", eps=" + radius);
         ArrayList<Integer> orderedFile = new ArrayList<>();
         myOPTICS optics = new myOPTICS(radius, minPoints);
         optics.cluster(D, orderedFile);
@@ -94,8 +95,5 @@ public class Main {
 
         //Pass compareResults.py args to file
         System.out.println("Scikit-learn OPTICS implementation will be called in src/test/python/compareResults.py with args: min_samples=" + minPoints + ", max_eps="+ radius);
-        FileWriter argsFileWriter = new FileWriter("PythonArgs.csv");
-        argsFileWriter.write(category + "," + datasetName + "," + minPoints + ","+ radius + "\n");
-        argsFileWriter.close();
     }
 }

@@ -4,13 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-import javax.swing.JFrame;
-
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.DefaultCategoryDataset; 
-
 public abstract class DObject {
     protected int ID = 0;
     protected int clusterID = 0;
@@ -152,32 +145,4 @@ public abstract class DObject {
         return this.getID() + "," + this.getCoreDistance() + "," + this.getReachabilityDistance();
     }
 
-    public static void plotReachability(ArrayList<? extends DObject> D){
-       
-        // Create dataset
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        for (DObject o : D){
-            dataset.addValue(o.getReachabilityDistance(), "Reachability", Integer.toString(o.getID()));
-        }
-
-        // Create chart
-        JFreeChart chart = ChartFactory.createBarChart(
-                "Reachability Plot",  // Chart title
-                "Cluster-order of the objects",          // X-Axis Label
-                "Reachability",  // Y-Axis Label
-                dataset
-        );
-
-        // Show it in a JFrame
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new ChartPanel(chart));
-        frame.pack();
-        frame.setVisible(true);
-    }
-
 }
-
-
-
-
