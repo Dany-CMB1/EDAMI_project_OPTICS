@@ -26,7 +26,7 @@ if (datafile == None):
 
 D = readFile(datafile, category)
 
-optics = OPTICS(min_samples=3, max_eps=math.sqrt(2), metric="euclidean", cluster_method='xi')
+optics = OPTICS(min_samples=minPts, max_eps=eps, metric="euclidean", cluster_method='xi')
 optics.fit(D.drop(columns=['Class']))
 
 expectedRDists = optics.reachability_

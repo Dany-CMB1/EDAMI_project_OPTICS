@@ -1,5 +1,8 @@
 package myProject.Datatype;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 import javax.swing.JFrame;
 
@@ -109,6 +112,34 @@ public abstract class DObject {
             if (this.getID() != q.getID() && this.distance(q) <= epsilon && this.neighbors.indexOf(q.getID()) == -1){
                 this.neighbors.add(q.getID());
             }
+        }
+    }
+
+    //Find the maxSamples-closest neighbors of the object 
+    //!  An object is NOT considered as a neighbor of itself ! 
+    public void findNeighbors(ArrayList<? extends DObject> D, int maxSamples){
+        // Priority queue to store <ObjectID, Distance>, with max heap for closest neighbors
+        PriorityQueue<SimpleEntry<Integer, Double>> pq = new PriorityQueue<>(
+            Comparator.comparingDouble((SimpleEntry<Integer, Double> entry) -> -entry.getValue())
+        );
+
+        for (int i = 0; i < D.size(); i++) {
+            DObject other = D.get(i);
+            if (this == other) continue; // Skip self
+
+            double distance = this.distance(other);
+            pq.add(new SimpleEntry<>(i, distance));
+
+            // Maintain only maxSamples elements in the queue
+            if (pq.size() > maxSamples) {
+                pq.poll();
+            }
+        }
+
+        // The priority queue now contains the closest maxSamples neighbors
+        while (!pq.isEmpty()) {
+            SimpleEntry<Integer, Double> neighbor = pq.poll();
+            this.neighbors.add(neighbor.getKey());
         }
     }
 

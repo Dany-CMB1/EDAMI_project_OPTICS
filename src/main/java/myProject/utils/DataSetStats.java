@@ -9,13 +9,16 @@ public class DataSetStats {
     private double mean;
     private double standardDeviation;
 
-    public DataSetStats(ArrayList<? extends DObject> D, int maxSamples){
+    public DataSetStats(ArrayList<? extends DObject> D, int maxSamples) throws Exception {
         ArrayList<Double> neighborDistances = new ArrayList<>();
         for (DObject obj : D) {
             obj.findNeighbors(D, maxSamples);
             for (DObject neighbor : obj.getNeighbors(D)) {
                 neighborDistances.add(obj.distance(neighbor));
             }
+        }
+        if (neighborDistances.isEmpty()) {
+            throw new Exception("No neighbors found. Please check the dataset.");
         }
 
         this.mean = neighborDistances.stream().mapToDouble(Double::doubleValue).average().orElse(Double.NaN);
@@ -30,18 +33,22 @@ public class DataSetStats {
         return this.standardDeviation;
     }
 
-    public static void printDatasetInfo(ArrayList<? extends DObject> D) throws Exception {
-        DataSetStats stats = new DataSetStats(D, 4);
-        System.out.println("Mean: " + stats.getMean());
-        System.out.println("Standard Deviation: " + stats.getStandardDeviation());
-        final double radius = stats.getMean() + stats.getStandardDeviation() * 3;
-        System.out.println("Radius: " + radius + "\n");
+    public void printDatasetInfo(ArrayList<? extends DObject> D, String info) throws Exception {
 
-
-        for (DObject o : D) {
-            System.out.println("Object: " + o.getID());
-            System.out.println("\tNeighbors: " + o.getNeighborsID());
-            System.out.println("\tCore Distance: " + o.getCoreDistance());
+        System.out.println("\nDataset Information: ");
+        if (info.equals("summary") || info.equals("all")) {
+            System.out.println("\tNumber of objects: " + D.size());
+            System.out.println("\tAverage Distance between neighbors: " + this.getMean());
+            System.out.println("\tStandard Deviation: " + this.getStandardDeviation());
+            final double radius = this.getMean() + this.getStandardDeviation() * 3;
+            System.out.println("\tCalculated Radius: " + radius + "\n");
+        }
+        if (info.equals("all")) {
+            for (DObject o : D) {
+                System.out.println("Object: " + o.getID());
+                System.out.println("\tNeighbors: " + o.getNeighborsID());
+                System.out.println("\tCore Distance: " + o.getCoreDistance());
+            }
         }
     }
 }

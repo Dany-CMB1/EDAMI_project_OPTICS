@@ -57,18 +57,19 @@ public class Main {
             new File(outputDir).mkdirs();
         }
 
-
         // Choose appropriate data extraction method
         DataExtractionMethod method = DataExtractionMethodFactory.getMethod(category);
         method.extractData(datasetFile);
         ArrayList<? extends DObject> D = method.getData();
 
+        if (D.isEmpty()) {
+            throw new Exception("No data found. Please check the dataset.");
+        }
+
         // Estimate radius as done in jsat.clustering.OPTICS.cluster
-        DataSetStats stats = new DataSetStats(D, 6);
-        System.out.println("Mean: " + stats.getMean());
-        System.out.println("Standard Deviation: " + stats.getStandardDeviation());
+        DataSetStats stats = new DataSetStats(D, minPoints+1);
         final double radius = stats.getMean() + stats.getStandardDeviation() * 3;
-        System.out.println("Radius: " + radius);
+        stats.printDatasetInfo(D, "summary");
 
 
         // Run OPTICS
