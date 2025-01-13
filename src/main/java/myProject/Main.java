@@ -47,7 +47,7 @@ public class Main {
         }
         datasetFile = "data/" + category + "/" + datasetName + ".csv";
 
-        System.out.println("Dataset File: " + datasetFile);
+        System.out.println("\nDataset File: " + datasetFile);
         System.out.println("Output Directory: " + outputDir);
         
         Path outputPath = Path.of(outputDir);

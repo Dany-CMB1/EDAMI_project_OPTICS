@@ -29,34 +29,39 @@ D = readFile(datafile, category)
 optics = OPTICS(min_samples=minPts, max_eps=eps, metric="euclidean", cluster_method='xi')
 optics.fit(D.drop(columns=['Class']))
 
-expectedRDists = optics.reachability_
-expectedCDists = optics.core_distances_
-expectedOrderedFile = optics.ordering_  
-obtainedRDists = np.ndarray(len(expectedRDists))
-obtainedCDists = np.ndarray(len(expectedCDists))
-obtainedOrderedFile = np.ndarray(len(expectedOrderedFile))
+# Initialize arrays with np.inf as default values
+obtainedRDists = np.full(len(D), np.inf)
+obtainedCDists = np.full(len(D), np.inf)
+obtainedOrderedFile = np.zeros(len(D), dtype=int)
 
-file = open(outputDir + 'RDists.csv', 'r')
-for i, line in enumerate(file):
-    if (line == "NaN\n"):
-        obtainedRDists[i] = np.inf
-    obtainedRDists[i] =float(line)
-file.close()
+# Read RDists.csv, excluding the last line
+with open(outputDir + 'RDists.csv', 'r') as file:
+    lines = file.readlines()
+    for i, line in enumerate(lines):
+        if line.strip() and line != "NaN\n":
+            obtainedRDists[i] = float(line.strip())
 
-file = open(outputDir + 'CDists.csv', 'r')
-for i, line in enumerate(file):
-    if (line == "NaN\n"):
-        obtainedRDists[i] = np.inf
-    obtainedCDists[i] = float(line)
-file.close()
+# Read CDists.csv, excluding the last line
+with open(outputDir + 'CDists.csv', 'r') as file:
+    lines = file.readlines()
+    for i, line in enumerate(lines):
+        if line.strip() and line != "NaN\n":
+            obtainedCDists[i] = float(line.strip())
+            
+# Read orderedFile.csv, excluding the last line
+with open(outputDir + 'orderedFile.csv', 'r') as file:
+    lines = file.readlines()
+    for i, line in enumerate(lines):
+        if line.strip():  # This ensures we skip empty lines
+            obtainedOrderedFile[i] = int(line.strip())
 
-file = open(outputDir + 'orderedFile.csv', 'r')
-for i, line in enumerate(file):
-    obtainedOrderedFile[i] = float(line)
-file.close()
+plotGraphs(D, optics, obtainedRDists, obtainedCDists, obtainedOrderedFile, outputDir)
 
-plotGraphs(D, optics, expectedRDists, obtainedRDists, expectedCDists, obtainedCDists)
+# Write to outputfile verification for ordered file
+counter = sum(1 for i in range(len(D)) if obtainedOrderedFile[i] == optics.ordering_[i])
 
-# Print verification for ordered file
-if (expectedOrderedFile.all() == obtainedOrderedFile.all()):
-    print("\n > The ordered file is correct <\n")
+with open(outputDir + 'verification.txt', 'w') as file:
+    if counter == len(D):
+        file.write('The ordered file is correct')
+    else:
+        file.write('The ordered file is incorrect')
