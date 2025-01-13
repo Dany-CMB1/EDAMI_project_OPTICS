@@ -26,7 +26,7 @@ if (datafile == None):
 
 D = readFile(datafile, category)
 
-optics = OPTICS(min_samples=minPts, max_eps=eps, metric="euclidean", cluster_method='xi')
+optics = OPTICS(min_samples=minPts, max_eps=eps, metric="euclidean", cluster_method='xi', algorithm='brute')
 optics.fit(D.drop(columns=['Class']))
 
 # Initialize arrays with np.inf as default values
@@ -70,6 +70,7 @@ with open(outputDir + 'expectedOrderedFile.csv', 'w') as file:
         
 # Write verification results to the output file
 with open(outputDir + 'verification.txt', 'w') as file:
+    file.write('OPTICS was called with the following parameters:\n\tminPts = ' + str(minPts) + '\n\teps = ' + str(eps) + '\n')
     if counter == len(D):
         file.write('The ordered file is correct\n')
     else:
