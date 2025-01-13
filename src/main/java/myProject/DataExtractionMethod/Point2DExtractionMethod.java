@@ -33,6 +33,7 @@ public class Point2DExtractionMethod implements DataExtractionMethod{
 
             Point2D point = new Point2D();
 
+            // No class needed
             point.setX(Double.parseDouble(parts[0]));
             point.setY(Double.parseDouble(parts[1]));
             point.setID(i);

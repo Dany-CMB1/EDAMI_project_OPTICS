@@ -2,6 +2,8 @@ package myProject;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -47,6 +49,14 @@ public class Main {
 
         System.out.println("Dataset File: " + datasetFile);
         System.out.println("Output Directory: " + outputDir);
+        
+        Path outputPath = Path.of(outputDir);
+
+        // Create output directory if it does not exist
+        if (!Files.exists(outputPath)) {
+            new File(outputDir).mkdirs();
+        }
+
 
         // Choose appropriate data extraction method
         DataExtractionMethod method = DataExtractionMethodFactory.getMethod(category);
@@ -61,10 +71,12 @@ public class Main {
         System.out.println("Radius: " + radius);
 
 
+        // Run OPTICS
         ArrayList<Integer> orderedFile = new ArrayList<>();
         myOPTICS optics = new myOPTICS(radius, minPoints);
         optics.cluster(D, orderedFile);
 
+        // Write output files
         FileWriter rDistsFileWriter = new FileWriter(outputDir + "RDists.csv");
         FileWriter cDistsFileWriter = new FileWriter(outputDir + "CDists.csv");
         FileWriter orderedFileWriter = new FileWriter(outputDir + "orderedFile.csv");
@@ -77,7 +89,7 @@ public class Main {
         cDistsFileWriter.close();
         orderedFileWriter.close();
 
-        //Write Python args file
+        //Pass compareResults.py args to file
         FileWriter argsFileWriter = new FileWriter("PythonArgs.csv");
         argsFileWriter.write(category + "," + datasetName + "," + minPoints + ","+ radius + "\n");
         argsFileWriter.close();
