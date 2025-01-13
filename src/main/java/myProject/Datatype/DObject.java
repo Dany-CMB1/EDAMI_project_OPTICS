@@ -23,6 +23,10 @@ public abstract class DObject {
 
     public abstract double distance(DObject p);
 
+
+    //Clone 
+    public abstract DObject clone();
+
     //Getters
 
     public int getID(){
@@ -82,20 +86,16 @@ public abstract class DObject {
     // Set the core distance of the object, as described in the OPTICS algorithm
     public void setCoreDistance(ArrayList<? extends DObject> D, int MinPts){
 
-        int countedNeighbors = 0;
         ArrayList<? extends DObject> neighborhood = this.getNeighbors(D);
+        ArrayList<Double> distancesToNeighbors = new ArrayList<>();
 
         // Find the MinPts-th closest neighbor and set the core distance to the distance to that neighbor
-        ArrayList<Double> distancesToNeighbors = new ArrayList<>();
-        for (DObject n : neighborhood){
-            distancesToNeighbors.add(this.distance(n));
-            if (++countedNeighbors == MinPts){
-                break;
+        if (neighborhood.size() >= MinPts){
+            for (DObject n : neighborhood){
+                distancesToNeighbors.add(this.distance(n));
             }
-        }
-        distancesToNeighbors.sort(null);
-        if (countedNeighbors >= MinPts){
-            this.coreDistance = distancesToNeighbors.get(MinPts - 2);
+            distancesToNeighbors.sort(null);
+            this.coreDistance = distancesToNeighbors.get(MinPts - 1);
         }else{
             this.coreDistance = Double.NaN;
         }
@@ -107,7 +107,11 @@ public abstract class DObject {
 
     //Find the neighbors of the object within a distance epsilon
     //!  An object is NOT considered as a neighbor of itself ! 
-    public void findNeighbors(ArrayList<? extends DObject> D, double epsilon){
+    public void findNeighbors(ArrayList<? extends DObject> D, double epsilon) throws IllegalStateException{
+        // Attribute neighbors can be populated during statistics calculation, but the definition of neighbors is not the same as here
+        if (!this.neighbors.isEmpty()){
+            this.neighbors.clear();
+        }
         for (DObject q : D){
             if (this.getID() != q.getID() && this.distance(q) <= epsilon && this.neighbors.indexOf(q.getID()) == -1){
                 this.neighbors.add(q.getID());
@@ -115,12 +119,12 @@ public abstract class DObject {
         }
     }
 
-    //Find the maxSamples-closest neighbors of the object 
+    //Find the maxSamples-closest neighbors of an object among a list of objects
     //!  An object is NOT considered as a neighbor of itself ! 
-    public void findNeighbors(ArrayList<? extends DObject> D, int maxSamples){
-        // Priority queue to store <ObjectID, Distance>, with max heap for closest neighbors
+    public void findClosestNeighbors(ArrayList<? extends DObject> D, int maxSamples){
+        // Min-heap to store <ObjectID, Distance>, keeping closest neighbors
         PriorityQueue<SimpleEntry<Integer, Double>> pq = new PriorityQueue<>(
-            Comparator.comparingDouble((SimpleEntry<Integer, Double> entry) -> -entry.getValue())
+            Comparator.comparingDouble(SimpleEntry::getValue)
         );
 
         for (int i = 0; i < D.size(); i++) {
@@ -130,16 +134,15 @@ public abstract class DObject {
             double distance = this.distance(other);
             pq.add(new SimpleEntry<>(i, distance));
 
-            // Maintain only maxSamples elements in the queue
+            // Remove farthest neighbor if the heap exceeds maxSamples
             if (pq.size() > maxSamples) {
                 pq.poll();
             }
         }
 
-        // The priority queue now contains the closest maxSamples neighbors
+        // Retrieve neighbors from the priority queue in reverse order (closest first)
         while (!pq.isEmpty()) {
-            SimpleEntry<Integer, Double> neighbor = pq.poll();
-            this.neighbors.add(neighbor.getKey());
+            this.neighbors.add(0,pq.poll().getKey());
         }
     }
 

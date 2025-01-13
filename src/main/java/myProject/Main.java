@@ -93,6 +93,7 @@ public class Main {
         orderedFileWriter.close();
 
         //Pass compareResults.py args to file
+        System.out.println("Scikit-learn OPTICS implementation will be called in src/test/python/compareResults.py with args: min_samples=" + minPoints + ", max_eps="+ radius);
         FileWriter argsFileWriter = new FileWriter("PythonArgs.csv");
         argsFileWriter.write(category + "," + datasetName + "," + minPoints + ","+ radius + "\n");
         argsFileWriter.close();

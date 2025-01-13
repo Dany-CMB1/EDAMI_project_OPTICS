@@ -105,4 +105,9 @@ public class Iris extends DObject {
         return super.toString();
     }
 
+    @Override
+    public Iris clone(){
+        return new Iris(this.sepal_length, this.sepal_width, this.petal_length, this.petal_width, this.species);
+    }
+
 }

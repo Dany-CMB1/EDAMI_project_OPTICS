@@ -9,10 +9,10 @@ public class DataSetStats {
     private double mean;
     private double standardDeviation;
 
-    public DataSetStats(ArrayList<? extends DObject> D, int maxSamples) throws Exception {
+    public DataSetStats(ArrayList<? extends DObject> D, int numNeighbors) throws Exception {
         ArrayList<Double> neighborDistances = new ArrayList<>();
         for (DObject obj : D) {
-            obj.findNeighbors(D, maxSamples);
+            obj.findClosestNeighbors(D, numNeighbors);
             for (DObject neighbor : obj.getNeighbors(D)) {
                 neighborDistances.add(obj.distance(neighbor));
             }

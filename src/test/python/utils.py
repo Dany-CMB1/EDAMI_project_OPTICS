@@ -16,6 +16,17 @@ def readFile(file, category):
     return D
 
 
+def calculate_relative_differences(obtained, expected):
+    """Calculate relative differences, handling special cases."""
+    rel_differences = np.zeros(len(expected))
+    for i in range(len(expected)):
+        if expected[i] == 0 or abs(obtained[i]) == np.inf or np.isnan(obtained[i]):
+            rel_differences[i] = 0
+        else:
+            rel_differences[i] = 100 * (obtained[i] - expected[i]) / expected[i]
+    return rel_differences
+
+
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.gridspec import GridSpec
@@ -26,12 +37,10 @@ def plotGraphs(D, optics, obtainedRDists, obtainedCDists, obtainedOrdered, outpu
         expectedCDists = optics.core_distances_
         expectedRDists = optics.reachability_
         
-        # Compute absolute and relative differences
-        absCDists = abs(expectedCDists - obtainedCDists)
-        absRDists = abs(expectedRDists - obtainedRDists)
-        relCDists = np.where(expectedCDists == 0, 0, (absCDists / expectedCDists) * 100)
-        relRDists = np.where(expectedRDists == 0, 0, (absRDists / expectedRDists) * 100)
-    
+        # Compute absolute and relative differences. Avoid division by zero, nan values and inf values
+        relCDists = calculate_relative_differences(obtainedCDists, expectedCDists)
+        relRDists = calculate_relative_differences(obtainedRDists, expectedRDists)              
+                        
          # 2D data: plottable
         if (len(attributes) == 3):
                 numRows = 2

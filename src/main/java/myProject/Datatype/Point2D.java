@@ -64,4 +64,9 @@ public class Point2D extends DObject {
     public String toString(){
         return super.toString();
     }
+
+    @Override
+    public Point2D clone(){
+        return new Point2D(this.x, this.y);
+    }
 }
