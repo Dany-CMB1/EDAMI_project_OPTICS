@@ -60,7 +60,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>Main</mainClass>
+                            <mainClass>myProject.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
