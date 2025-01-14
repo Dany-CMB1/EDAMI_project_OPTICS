@@ -74,7 +74,7 @@ def plotGraphs(D, optics, obtainedRDists, obtainedCDists, obtainedOrdered, outpu
         ax2.set_xlabel('Ordered Object ID')        
         ax2.set_ylabel('Expected Reachability Distances', color='blue')
         ax2.tick_params(axis='y', labelcolor='blue')
-        ax2.set_title('Reachability Distances vs Ordered Objects')
+        ax2.set_title('Reachability plot - Expected vs Obtained')
         ax2.set_xlim(0, len(expectedRDists))
         ax2.set_ylim(ymin=0)
         
@@ -89,7 +89,7 @@ def plotGraphs(D, optics, obtainedRDists, obtainedCDists, obtainedOrdered, outpu
         
         # Save the first figure
         plt.tight_layout()
-        plt.savefig(outputDir + 'scatter_and_RDists.png')
+        plt.savefig(outputDir + 'scatterRplot.png')
         
         # Second figure: Differences in core and reachability distances
         fig2, (ax3, ax4) = plt.subplots(1, 2, figsize=(12, 6))
@@ -118,7 +118,7 @@ def plotGraphs(D, optics, obtainedRDists, obtainedCDists, obtainedOrdered, outpu
         
         # Save the second figure
         plt.tight_layout()
-        plt.savefig(outputDir + 'differences.png')
+        plt.savefig(outputDir + 'CRdifferences.png')
         
         # 3rd figure: Ordered objects vs Objects ID
         fig3, ax5 = plt.subplots(figsize=(12, 6))

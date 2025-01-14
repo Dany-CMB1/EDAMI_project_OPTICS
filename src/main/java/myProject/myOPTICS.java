@@ -89,8 +89,8 @@ public class myOPTICS {
                 }
                 // n is in orderSeeds ==> update reachability distance if newReachDist is smaller
                 else if (newReachDist < n.getReachabilityDistance()){
+                    this.orderSeeds.remove(n);  
                     n.setReachabilityDistance(newReachDist);  
-                    this.orderSeeds.remove(n);    
                     this.orderSeeds.add(n);
                 }       
             }
