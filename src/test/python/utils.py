@@ -62,17 +62,16 @@ def plotGraphs(D, optics, obtainedRDists, obtainedCDists, obtainedOrdered, outpu
                 currRow+=1
     
         # Reachability distances vs ordered objects
-        # Convert obtainedOrdered to an array of indices
 
         # Reorder distances based on the ordered indices in obtainedOrdered
         obtainedRDistsOrdered = [obtainedRDists[i] for i in obtainedOrdered]
-        expectedRDistsOrdered = [optics.reachability_[i] for i in obtainedOrdered]
+        expectedRDistsOrdered = [optics.reachability_[i] for i in optics.ordering_]
         relCDistsOrdered = [relCDists[i] for i in obtainedOrdered]
         relRDistsOrdered = [relRDists[i] for i in obtainedOrdered]
         
         ax2 = fig.add_subplot(gs[currRow])
         ax2.plot(expectedRDistsOrdered, label='Expected', color='blue')
-        ax2.set_xlabel('Ordered Objects')
+        ax2.set_xlabel('Ordered Object ID')        
         ax2.set_ylabel('Expected Reachability Distances', color='blue')
         ax2.tick_params(axis='y', labelcolor='blue')
         ax2.set_title('Reachability Distances vs Ordered Objects')
@@ -120,3 +119,21 @@ def plotGraphs(D, optics, obtainedRDists, obtainedCDists, obtainedOrdered, outpu
         # Save the second figure
         plt.tight_layout()
         plt.savefig(outputDir + 'differences.png')
+        
+        # 3rd figure: Ordered objects vs Objects ID
+        fig3, ax5 = plt.subplots(figsize=(12, 6))
+        ax5.plot(optics.ordering_, label=' Expected Ordered Objects', color='blue')
+        ax5.set_xlabel('Object ID')
+        ax5.set_ylabel('Expected Ordered Objects', color='blue')
+        ax5.set_title('Ordered Objects vs Object ID')
+        ax5.set_xlim(0, len(optics.ordering_))
+        ax5.set_ylim(0, len(optics.ordering_))
+        ax51 = ax5.twinx()
+        ax51.plot(obtainedOrdered, label='Obtained Ordered Objects', color='red')
+        ax51.tick_params(axis='y', labelcolor='red')
+        ax51.set_ylim(0, len(optics.ordering_))
+        
+        # Save the 3rd figure
+        plt.tight_layout()
+        plt.savefig(outputDir + 'ordering.png')
+        

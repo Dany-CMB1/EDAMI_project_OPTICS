@@ -46,7 +46,7 @@ public class myOPTICS {
         obj.findNeighbors(D, this.epsilon);
         obj.setProcessed();
         obj.setReachabilityDistance(Double.NaN);
-        obj.setCoreDistance(D, this.MinPts);
+        obj.findCoreDistance(D, this.MinPts);
 
         orderedFile.add(obj.getID());
 
@@ -61,7 +61,7 @@ public class myOPTICS {
 
                 currentObject.findNeighbors(D, this.epsilon);
                 currentObject.setProcessed();
-                currentObject.setCoreDistance(D, this.MinPts);
+                currentObject.findCoreDistance(D, this.MinPts);
 
                 orderedFile.add(currentObject.getID());
 

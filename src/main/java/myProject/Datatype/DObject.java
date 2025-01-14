@@ -76,8 +76,8 @@ public abstract class DObject {
         this.reachabilityDistance = rDistance;
     }
 
-    // Set the core distance of the object, as described in the OPTICS algorithm
-    public void setCoreDistance(ArrayList<? extends DObject> D, int MinPts){
+    // Find the core distance of the object, as described in the OPTICS algorithm
+    public void findCoreDistance(ArrayList<? extends DObject> D, int MinPts){
 
         ArrayList<? extends DObject> neighborhood = this.getNeighbors(D);
         ArrayList<Double> distancesToNeighbors = new ArrayList<>();
@@ -99,14 +99,14 @@ public abstract class DObject {
     }
 
     //Find the neighbors of the object within a distance epsilon
-    //!  An object is NOT considered as a neighbor of itself ! 
+    //!  An object IS considered a neighbor of itself ! 
     public void findNeighbors(ArrayList<? extends DObject> D, double epsilon) throws IllegalStateException{
         // Attribute neighbors can be populated during statistics calculation, but the definition of neighbors is not the same as here
         if (!this.neighbors.isEmpty()){
             this.neighbors.clear();
         }
         for (DObject q : D){
-            if (this.getID() != q.getID() && this.distance(q) <= epsilon && this.neighbors.indexOf(q.getID()) == -1){
+            if (this.distance(q) <= epsilon && this.neighbors.indexOf(q.getID()) == -1){
                 this.neighbors.add(q.getID());
             }
         }
